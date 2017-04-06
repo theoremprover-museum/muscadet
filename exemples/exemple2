@@ -1,0 +1,6 @@
+include(exemples/exemple2_definitions).
+% transitivite de l inclusion
+theoreme(thI03,![A,B,C]:(inc(A,B) & inc(B,C) => inc(A,C))).
+% l'ensemble des parties d'une intersection est égale à l'intersection des parties
+theoreme(thI21,![A,B]:egal_ens(parties(inter(A,B)),inter(parties(A),parties(B)))).
+%theoreme(thI21,![A,B]:inc(parties(inter(A,B)),inter(parties(A),parties(B)))).

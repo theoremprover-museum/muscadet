@@ -1,0 +1,275 @@
+
+machine:fdop
+********************************************************************************
+theoreme a demontrer 
+![A, B]:egal_ens(parties(inter(A, B)), inter(parties(A), parties(B))) 
+-------------------------------------------------------                      
+theoreme 0 demontre (thI03) en 0.04 secondes
+================================================================================
+
+
+*************************************
+* etapes utiles de la demonstration *
+*************************************
+ 
+
+* * * * * * * * * * * * * * * * * * * * * * * *
+dans ce qui suit, N est le numero d'un (sous-)theoreme
+         E est l'etape courante
+            ou l'etape ou une hypothese ou conclusion a ete ajoutee ou modifiee
+hyp(N,H,E) signifie que H est une hypothese du (sous-)theoreme N
+concl(N,C,E) signifie que C est la conclusion du (sous-)theoreme N 
+obj_ct(N,C) signifie que C est un objet cree ou une constante donnee 
+ajhyp(N,H,E) signifie ajouter H comme nouvelle hypothese pour N 
+nouvconcl(N,C,E) signifie que la nouvelle conclusion de N est C
+           (C remplace la conclusion precedente)
+un sous-theoreme N-i ou N+i est un sous-theoreme du (sous-)theoreme N 
+   N est demontre si tous les N-i ont ete demontres (noeud-&)
+             ou si un N+i a ete demontre (noeud-|)
+le theoreme initial a pour numero 0
+
+* * * theoreme a demontrer
+![A, B]:egal_ens(parties(inter(A, B)), inter(parties(A), parties(B)))
+
+* * * demonstration :
+
+* * * * * * theoreme 0 * * * * * *
+*** nouvconcl(0, ![A, B]:egal_ens(parties(inter(A, B)), inter(parties(A), parties(B))), 1) 
+*** explication : theoreme initial
+------------------------------------------------------- action ini 
+creer objet(s) z2 z1  
+*** nouvconcl(0, egal_ens(parties(inter(z1, z2)), inter(parties(z1), parties(z2))), 2) 
+*** car concl((0, ![A, B]:egal_ens(parties(inter(A, B)), inter(parties(A), parties(B)))), 1) 
+*** explication : on instancie la(les) variable(s) universelle(s) de la conclusion
+------------------------------------------------------- regle ! 
+*** nouvconcl(0, seul(inter(z1, z2)::A, seul(parties(A)::D, seul(parties(z1)::B, seul(parties(z2)::C, seul(inter(B, C)::E, egal_ens(D, E)))))), 3) 
+*** car concl(0, egal_ens(parties(inter(z1, z2)), inter(parties(z1), parties(z2))), 2) 
+*** explication : elimination des symboles fonctionnels dans la conclusion 
+par exemple, p(f(X)) est remplace par seul(f(X)::Y, p(Y)) 
+------------------------------------------------------- elifon
+*** ajhyp(0, inter(z1, z2)::z3, 4), nouvconcl(0, _, 4) 
+*** car concl(0, seul(inter(z1, z2)::A, seul(parties(A)::D, seul(parties(z1)::B, seul(parties(z2)::C, seul(inter(B, C)::E, egal_ens(D, E)))))), 3) 
+*** explication : creation de l'objet z3 et de sa definition 
+------------------------------------------------------- regle concl_seul 
+*** ajhyp(0, parties(z3)::z4, 5), nouvconcl(0, _, 5) 
+*** car concl(0, seul(parties(z3)::C, seul(parties(z1)::A, seul(parties(z2)::B, seul(inter(A, B)::D, egal_ens(C, D))))), 4) 
+*** explication : creation de l'objet z4 et de sa definition 
+------------------------------------------------------- regle concl_seul 
+*** ajhyp(0, parties(z1)::z5, 6), nouvconcl(0, _, 6) 
+*** car concl(0, seul(parties(z1)::A, seul(parties(z2)::B, seul(inter(A, B)::C, egal_ens(z4, C)))), 5) 
+*** explication : creation de l'objet z5 et de sa definition 
+------------------------------------------------------- regle concl_seul 
+*** ajhyp(0, parties(z2)::z6, 7), nouvconcl(0, _, 7) 
+*** car concl(0, seul(parties(z2)::A, seul(inter(z5, A)::B, egal_ens(z4, B))), 6) 
+*** explication : creation de l'objet z6 et de sa definition 
+------------------------------------------------------- regle concl_seul 
+*** ajhyp(0, inter(z5, z6)::z7, 8), nouvconcl(0, _, 8) 
+*** car concl(0, seul(inter(z5, z6)::A, egal_ens(z4, A)), 7) 
+*** explication : creation de l'objet z7 et de sa definition 
+------------------------------------------------------- regle concl_seul 
+*** nouvconcl(0, inc(z4, z7)&inc(z7, z4), 9) 
+*** car concl(0, egal_ens(z4, z7), 8) 
+*** explication : on remplace la conclusion  egal_ens(z4, z7)  par sa definition(fof egal_ens ) 
+------------------------------------------------------- regle def_concl_pred 
+
+* * * * * * creation * * * * * * sous-theoreme 0-1 * * * * * 
+toutes les hypotheses du (sous-)theoreme 0 sont hypotheses du sous-theoreme 0-1 
+*** nouvconcl(0-1, inc(z4, z7), 10) 
+*** car concl(0, inc(z4, z7)&inc(z7, z4), 9) 
+*** explication : pour demontrer une conjonction, on demontre successivement tous les elements de la conjonction
+------------------------------------------------------- action demconj 
+*** nouvconcl(0-1, ![A]: (app(A, z4)=>app(A, z7)), 11) 
+*** car concl(0-1, inc(z4, z7), 10) 
+*** explication : on remplace la conclusion  inc(z4, z7)  par sa definition(fof inc ) 
+------------------------------------------------------- regle def_concl_pred 
+creer objet(s) z8  
+*** nouvconcl(0-1, app(z8, z4)=>app(z8, z7), 12) 
+*** car concl((0, ![A]: (app(A, z4)=>app(A, z7))), 11) 
+*** explication : on instancie la(les) variable(s) universelle(s) de la conclusion
+------------------------------------------------------- regle ! 
+*** ajhyp(0-1, app(z8, z4), 13) 
+*** nouvconcl(0-1, app(z8, z7), 13) 
+*** car concl(0-1, app(z8, z4)=>app(z8, z7), 12) 
+*** explication : pour demontrer H=>C, on suppose H et on doit demontrer C
+------------------------------------------------------- regle => 
+*** ajhyp(0-1, inc(z8, z3), 14) 
+*** car hyp(0-1, parties(z3)::z4, 5), hyp(0-1, app(z8, z4), 13), obj_ct(0-1, z8) 
+*** explication : regle2 si (hyp(A, parties(D)::B, _), hyp(A, app(C, B), _), obj_ct(A, C))alors ajhyp(A, inc(C, D), _) 
+construite a partir de la definition de parties (fof app ) 
+------------------------------------------------------- regle parties 
+*** nouvconcl(0-1, app(z8, z5)&app(z8, z6), 15) 
+*** car concl(0-1, app(z8, z7), 13), hyp(0-1, inter(z5, z6)::z7, 8) 
+*** explication : definition app 
+------------------------------------------------------- regle defconcl_rel 
+
+* * * * * * creation * * * * * * sous-theoreme 0-1-1 * * * * * 
+toutes les hypotheses du (sous-)theoreme 0-1 sont hypotheses du sous-theoreme 0-1-1 
+*** nouvconcl(0-1-1, app(z8, z5), 16) 
+*** car concl(0-1, app(z8, z5)&app(z8, z6), 15) 
+*** explication : pour demontrer une conjonction, on demontre successivement tous les elements de la conjonction
+------------------------------------------------------- action demconj 
+*** nouvconcl(0-1-1, inc(z8, z1), 17) 
+*** car concl(0-1-1, app(z8, z5), 16), hyp(0-1-1, parties(z1)::z5, 6) 
+*** explication : definition app 
+------------------------------------------------------- regle defconcl_rel 
+*** nouvconcl(0-1-1, ![A]: (app(A, z8)=>app(A, z1)), 18) 
+*** car concl(0-1-1, inc(z8, z1), 17) 
+*** explication : on remplace la conclusion  inc(z8, z1)  par sa definition(fof inc ) 
+------------------------------------------------------- regle def_concl_pred 
+creer objet(s) z9  
+*** nouvconcl(0-1-1, app(z9, z8)=>app(z9, z1), 19) 
+*** car concl((0, ![A]: (app(A, z8)=>app(A, z1))), 18) 
+*** explication : on instancie la(les) variable(s) universelle(s) de la conclusion
+------------------------------------------------------- regle ! 
+*** ajhyp(0-1-1, app(z9, z8), 20) 
+*** nouvconcl(0-1-1, app(z9, z1), 20) 
+*** car concl(0-1-1, app(z9, z8)=>app(z9, z1), 19) 
+*** explication : pour demontrer H=>C, on suppose H et on doit demontrer C
+------------------------------------------------------- regle => 
+*** ajhyp(0-1-1, app(z9, z3), 21) 
+*** car hyp(0-1-1, inc(z8, z3), 14), hyp(0-1-1, app(z9, z8), 20), obj_ct(0-1-1, z9) 
+*** explication : regle2 si (hyp(A, inc(B, D), _), hyp(A, app(C, B), _), obj_ct(A, C))alors ajhyp(A, app(C, D), _) 
+construite a partir de la definition de inc (fof inc ) 
+------------------------------------------------------- regle inc 
+*** ajhyp(0-1-1, app(z9, z1), 22) 
+*** car hyp(0-1-1, inter(z1, z2)::z3, 4), hyp(0-1-1, app(z9, z3), 21), obj_ct(0-1-1, z9) 
+*** explication : regle2 si (hyp(A, inter(D, _)::B, _), hyp(A, app(C, B), _), obj_ct(A, C))alors ajhyp(A, app(C, D), _) 
+construite a partir de la definition de inter (fof app ) 
+------------------------------------------------------- regle inter 
+*** nouvconcl(0-1-1, true, 23) 
+*** car hyp(0-1-1, app(z9, z1), 22), concl(0-1-1, app(z9, z1), 20) 
+*** explication : la conclusion app(z9, z1) a demontrer est une hypothese 
+------------------------------------------------------- regle stop_hyp_concl 
+*** nouvconcl(0-1, app(z8, z6), 24) 
+*** car concl(0-1-1, true, 23) 
+*** explication : la conclusion app(z8, z5) du (sous-)theoreme 0-1 a ete demontree ( sous-theoreme 0-1-1 ) 
+------------------------------------------------------- action retourdem 
+
+* * * * * * creation * * * * * * sous-theoreme 0-1-2 * * * * * 
+toutes les hypotheses du (sous-)theoreme 0-1 sont hypotheses du sous-theoreme 0-1-2 
+*** nouvconcl(0-1-2, app(z8, z6), 25) 
+*** explication : demonstration du dernier element de la conjonction
+------------------------------------------------------- action demconj 
+*** nouvconcl(0-1-2, inc(z8, z2), 26) 
+*** car concl(0-1-2, app(z8, z6), 25), hyp(0-1-2, parties(z2)::z6, 7) 
+*** explication : definition app 
+------------------------------------------------------- regle defconcl_rel 
+*** nouvconcl(0-1-2, ![A]: (app(A, z8)=>app(A, z2)), 27) 
+*** car concl(0-1-2, inc(z8, z2), 26) 
+*** explication : on remplace la conclusion  inc(z8, z2)  par sa definition(fof inc ) 
+------------------------------------------------------- regle def_concl_pred 
+creer objet(s) z10  
+*** nouvconcl(0-1-2, app(z10, z8)=>app(z10, z2), 28) 
+*** car concl((0, ![A]: (app(A, z8)=>app(A, z2))), 27) 
+*** explication : on instancie la(les) variable(s) universelle(s) de la conclusion
+------------------------------------------------------- regle ! 
+*** ajhyp(0-1-2, app(z10, z8), 29) 
+*** nouvconcl(0-1-2, app(z10, z2), 29) 
+*** car concl(0-1-2, app(z10, z8)=>app(z10, z2), 28) 
+*** explication : pour demontrer H=>C, on suppose H et on doit demontrer C
+------------------------------------------------------- regle => 
+*** ajhyp(0-1-2, app(z10, z3), 30) 
+*** car hyp(0-1-2, inc(z8, z3), 14), hyp(0-1-2, app(z10, z8), 29), obj_ct(0-1-2, z10) 
+*** explication : regle2 si (hyp(A, inc(B, D), _), hyp(A, app(C, B), _), obj_ct(A, C))alors ajhyp(A, app(C, D), _) 
+construite a partir de la definition de inc (fof inc ) 
+------------------------------------------------------- regle inc 
+*** ajhyp(0-1-2, app(z10, z2), 32) 
+*** car hyp(0-1-2, inter(z1, z2)::z3, 4), hyp(0-1-2, app(z10, z3), 30), obj_ct(0-1-2, z10) 
+*** explication : regle2 si (hyp(A, inter(_, D)::B, _), hyp(A, app(C, B), _), obj_ct(A, C))alors ajhyp(A, app(C, D), _) 
+construite a partir de la definition de inter (fof app ) 
+------------------------------------------------------- regle inter1 
+*** nouvconcl(0-1-2, true, 33) 
+*** car hyp(0-1-2, app(z10, z2), 32), concl(0-1-2, app(z10, z2), 29) 
+*** explication : la conclusion app(z10, z2) a demontrer est une hypothese 
+------------------------------------------------------- regle stop_hyp_concl 
+*** nouvconcl(0-1, true, 34) 
+*** car concl(0-1-2, true, 33) 
+*** explication : la conclusion app(z8, z6) du (sous-)theoreme 0-1 a ete demontree ( sous-theoreme 0-1-2 ) 
+------------------------------------------------------- action retourdem 
+*** nouvconcl(0, inc(z7, z4), 35) 
+*** car concl(0-1, true, 34) 
+*** explication : la conclusion inc(z4, z7) du (sous-)theoreme 0 a ete demontree ( sous-theoreme 0-1 ) 
+------------------------------------------------------- action retourdem 
+
+* * * * * * creation * * * * * * sous-theoreme 0-2 * * * * * 
+toutes les hypotheses du (sous-)theoreme 0 sont hypotheses du sous-theoreme 0-2 
+*** nouvconcl(0-2, inc(z7, z4), 36) 
+*** explication : demonstration du dernier element de la conjonction
+------------------------------------------------------- action demconj 
+*** nouvconcl(0-2, ![A]: (app(A, z7)=>app(A, z4)), 37) 
+*** car concl(0-2, inc(z7, z4), 36) 
+*** explication : on remplace la conclusion  inc(z7, z4)  par sa definition(fof inc ) 
+------------------------------------------------------- regle def_concl_pred 
+creer objet(s) z11  
+*** nouvconcl(0-2, app(z11, z7)=>app(z11, z4), 38) 
+*** car concl((0, ![A]: (app(A, z7)=>app(A, z4))), 37) 
+*** explication : on instancie la(les) variable(s) universelle(s) de la conclusion
+------------------------------------------------------- regle ! 
+*** ajhyp(0-2, app(z11, z7), 39) 
+*** nouvconcl(0-2, app(z11, z4), 39) 
+*** car concl(0-2, app(z11, z7)=>app(z11, z4), 38) 
+*** explication : pour demontrer H=>C, on suppose H et on doit demontrer C
+------------------------------------------------------- regle => 
+*** ajhyp(0-2, app(z11, z5), 40) 
+*** car hyp(0-2, inter(z5, z6)::z7, 8), hyp(0-2, app(z11, z7), 39), obj_ct(0-2, z11) 
+*** explication : regle2 si (hyp(A, inter(D, _)::B, _), hyp(A, app(C, B), _), obj_ct(A, C))alors ajhyp(A, app(C, D), _) 
+construite a partir de la definition de inter (fof app ) 
+------------------------------------------------------- regle inter 
+*** ajhyp(0-2, inc(z11, z1), 41) 
+*** car hyp(0-2, parties(z1)::z5, 6), hyp(0-2, app(z11, z5), 40), obj_ct(0-2, z11) 
+*** explication : regle2 si (hyp(A, parties(D)::B, _), hyp(A, app(C, B), _), obj_ct(A, C))alors ajhyp(A, inc(C, D), _) 
+construite a partir de la definition de parties (fof app ) 
+------------------------------------------------------- regle parties 
+*** ajhyp(0-2, app(z11, z6), 42) 
+*** car hyp(0-2, inter(z5, z6)::z7, 8), hyp(0-2, app(z11, z7), 39), obj_ct(0-2, z11) 
+*** explication : regle2 si (hyp(A, inter(_, D)::B, _), hyp(A, app(C, B), _), obj_ct(A, C))alors ajhyp(A, app(C, D), _) 
+construite a partir de la definition de inter (fof app ) 
+------------------------------------------------------- regle inter1 
+*** ajhyp(0-2, inc(z11, z2), 43) 
+*** car hyp(0-2, parties(z2)::z6, 7), hyp(0-2, app(z11, z6), 42), obj_ct(0-2, z11) 
+*** explication : regle2 si (hyp(A, parties(D)::B, _), hyp(A, app(C, B), _), obj_ct(A, C))alors ajhyp(A, inc(C, D), _) 
+construite a partir de la definition de parties (fof app ) 
+------------------------------------------------------- regle parties 
+*** nouvconcl(0-2, inc(z11, z3), 44) 
+*** car concl(0-2, app(z11, z4), 39), hyp(0-2, parties(z3)::z4, 5) 
+*** explication : definition app 
+------------------------------------------------------- regle defconcl_rel 
+*** nouvconcl(0-2, ![A]: (app(A, z11)=>app(A, z3)), 45) 
+*** car concl(0-2, inc(z11, z3), 44) 
+*** explication : on remplace la conclusion  inc(z11, z3)  par sa definition(fof inc ) 
+------------------------------------------------------- regle def_concl_pred 
+creer objet(s) z12  
+*** nouvconcl(0-2, app(z12, z11)=>app(z12, z3), 46) 
+*** car concl((0, ![A]: (app(A, z11)=>app(A, z3))), 45) 
+*** explication : on instancie la(les) variable(s) universelle(s) de la conclusion
+------------------------------------------------------- regle ! 
+*** ajhyp(0-2, app(z12, z11), 47) 
+*** nouvconcl(0-2, app(z12, z3), 47) 
+*** car concl(0-2, app(z12, z11)=>app(z12, z3), 46) 
+*** explication : pour demontrer H=>C, on suppose H et on doit demontrer C
+------------------------------------------------------- regle => 
+*** ajhyp(0-2, app(z12, z1), 48) 
+*** car hyp(0-2, inc(z11, z1), 41), hyp(0-2, app(z12, z11), 47), obj_ct(0-2, z12) 
+*** explication : regle2 si (hyp(A, inc(B, D), _), hyp(A, app(C, B), _), obj_ct(A, C))alors ajhyp(A, app(C, D), _) 
+construite a partir de la definition de inc (fof inc ) 
+------------------------------------------------------- regle inc 
+*** ajhyp(0-2, app(z12, z2), 49) 
+*** car hyp(0-2, inc(z11, z2), 43), hyp(0-2, app(z12, z11), 47), obj_ct(0-2, z12) 
+*** explication : regle2 si (hyp(A, inc(B, D), _), hyp(A, app(C, B), _), obj_ct(A, C))alors ajhyp(A, app(C, D), _) 
+construite a partir de la definition de inc (fof inc ) 
+------------------------------------------------------- regle inc 
+*** ajhyp(0-2, app(z12, z3), 50) 
+*** car hyp(0-2, inter(z1, z2)::z3, 4), hyp(0-2, app(z12, z1), 48), hyp(0-2, app(z12, z2), 49), obj_ct(0-2, z12) 
+*** explication : regle2 si (hyp(A, inter(B, D)::E, _), hyp(A, app(C, B), _), hyp(A, app(C, D), _), obj_ct(A, C))alors ajhyp(A, app(C, E), _) 
+construite a partir de la definition de inter (fof app ) 
+------------------------------------------------------- regle inter2 
+*** nouvconcl(0-2, true, 51) 
+*** car hyp(0-2, app(z12, z3), 50), concl(0-2, app(z12, z3), 47) 
+*** explication : la conclusion app(z12, z3) a demontrer est une hypothese 
+------------------------------------------------------- regle stop_hyp_concl 
+*** nouvconcl(0, true, 52) 
+*** car concl(0-2, true, 51) 
+*** explication : la conclusion inc(z7, z4) du (sous-)theoreme 0 a ete demontree ( sous-theoreme 0-2 ) 
+------------------------------------------------------- action retourdem 
+le theoreme initial 0 est donc demontre
+* * * * * * * * * * * * * * * * * * * * * * * *

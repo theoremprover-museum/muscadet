@@ -1,0 +1,105 @@
+
+machine:fdop
+********************************************************************************
+theoreme a demontrer 
+![A]:transitive(inc, parties(A)) 
+-------------------------------------------------------                
+theoreme 0 demontre (trans) en 0.03 secondes
+================================================================================
+
+
+*************************************
+* etapes utiles de la demonstration *
+*************************************
+ 
+
+* * * * * * * * * * * * * * * * * * * * * * * *
+dans ce qui suit, N est le numero d'un (sous-)theoreme
+         E est l'etape courante
+            ou l'etape ou une hypothese ou conclusion a ete ajoutee ou modifiee
+hyp(N,H,E) signifie que H est une hypothese du (sous-)theoreme N
+concl(N,C,E) signifie que C est la conclusion du (sous-)theoreme N 
+obj_ct(N,C) signifie que C est un objet cree ou une constante donnee 
+ajhyp(N,H,E) signifie ajouter H comme nouvelle hypothese pour N 
+nouvconcl(N,C,E) signifie que la nouvelle conclusion de N est C
+           (C remplace la conclusion precedente)
+un sous-theoreme N-i ou N+i est un sous-theoreme du (sous-)theoreme N 
+   N est demontre si tous les N-i ont ete demontres (noeud-&)
+             ou si un N+i a ete demontre (noeud-|)
+le theoreme initial a pour numero 0
+
+* * * theoreme a demontrer
+![A]:transitive(inc, parties(A))
+
+* * * demonstration :
+
+* * * * * * theoreme 0 * * * * * *
+*** nouvconcl(0, ![A]:transitive(inc, parties(A)), 1) 
+*** explication : theoreme initial
+------------------------------------------------------- action ini 
+creer objet(s) z1  
+*** nouvconcl(0, transitive(inc, parties(z1)), 2) 
+*** car concl((0, ![A]:transitive(inc, parties(A))), 1) 
+*** explication : on instancie la(les) variable(s) universelle(s) de la conclusion
+------------------------------------------------------- regle ! 
+*** nouvconcl(0, seul(parties(z1)::A, transitive(inc, A)), 3) 
+*** car concl(0, transitive(inc, parties(z1)), 2) 
+*** explication : elimination des symboles fonctionnels dans la conclusion 
+par exemple, p(f(X)) est remplace par seul(f(X)::Y, p(Y)) 
+------------------------------------------------------- elifon
+*** ajhyp(0, parties(z1)::z2, 4), nouvconcl(0, _, 4) 
+*** car concl(0, seul(parties(z1)::A, transitive(inc, A)), 3) 
+*** explication : creation de l'objet z2 et de sa definition 
+------------------------------------------------------- regle concl_seul 
+*** nouvconcl(0, ![A, B, C]: (app(A, z2)&app(B, z2)&app(C, z2)=> ..[inc, A|...]& ..[inc, B|...]=> ..[inc, A, C]), 5) 
+*** car concl(0, transitive(inc, z2), 4) 
+*** explication : on remplace la conclusion  transitive(inc, z2)  par sa definition(fof transitive ) 
+------------------------------------------------------- regle def_concl_pred 
+creer objet(s) z5 z4 z3  
+*** nouvconcl(0, app(z3, z2)&app(z4, z2)&app(z5, z2)=> ..[inc, z3, z4]& ..[inc, z4, z5]=> ..[inc, z3, z5], 6) 
+*** car concl((0, ![A, B, C]: (app(A, z2)&app(B, z2)&app(C, z2)=> ..[inc|...]& ..[inc|...]=> ..[inc, A|...])), 5) 
+*** explication : on instancie la(les) variable(s) universelle(s) de la conclusion
+------------------------------------------------------- regle ! 
+*** ajhyp(0, app(z3, z2), 7)  
+*** ajhyp(0, app(z4, z2), 7)  
+*** ajhyp(0, app(z5, z2), 7) 
+*** nouvconcl(0, ..[inc, z3, z4]& ..[inc, z4, z5]=> ..[inc, z3, z5], 7) 
+*** car concl(0, app(z3, z2)&app(z4, z2)&app(z5, z2)=> ..[inc, z3, z4]& ..[inc, z4, z5]=> ..[inc, z3, z5], 6) 
+*** explication : pour demontrer H=>C, on suppose H et on doit demontrer C
+------------------------------------------------------- regle => 
+*** ajhyp(0, inc(z3, z4), 8)  
+*** ajhyp(0, inc(z4, z5), 8) 
+*** nouvconcl(0, inc(z3, z5), 8) 
+*** car concl(0, ..[inc, z3, z4]& ..[inc, z4, z5]=> ..[inc, z3, z5], 7) 
+*** explication : pour demontrer H=>C, on suppose H et on doit demontrer C
+------------------------------------------------------- regle => 
+*** nouvconcl(0, ![A]: (app(A, z3)=>app(A, z5)), 12) 
+*** car concl(0, inc(z3, z5), 8) 
+*** explication : on remplace la conclusion  inc(z3, z5)  par sa definition(fof inc ) 
+------------------------------------------------------- regle def_concl_pred 
+creer objet(s) z6  
+*** nouvconcl(0, app(z6, z3)=>app(z6, z5), 13) 
+*** car concl((0, ![A]: (app(A, z3)=>app(A, z5))), 12) 
+*** explication : on instancie la(les) variable(s) universelle(s) de la conclusion
+------------------------------------------------------- regle ! 
+*** ajhyp(0, app(z6, z3), 14) 
+*** nouvconcl(0, app(z6, z5), 14) 
+*** car concl(0, app(z6, z3)=>app(z6, z5), 13) 
+*** explication : pour demontrer H=>C, on suppose H et on doit demontrer C
+------------------------------------------------------- regle => 
+*** ajhyp(0, app(z6, z4), 15) 
+*** car hyp(0, inc(z3, z4), 8), hyp(0, app(z6, z3), 14), obj_ct(0, z6) 
+*** explication : regle2 si (hyp(A, inc(B, D), _), hyp(A, app(C, B), _), obj_ct(A, C))alors ajhyp(A, app(C, D), _) 
+construite a partir de la definition de inc (fof inc ) 
+------------------------------------------------------- regle inc 
+*** ajhyp(0, app(z6, z5), 16) 
+*** car hyp(0, inc(z4, z5), 8), hyp(0, app(z6, z4), 15), obj_ct(0, z6) 
+*** explication : regle2 si (hyp(A, inc(B, D), _), hyp(A, app(C, B), _), obj_ct(A, C))alors ajhyp(A, app(C, D), _) 
+construite a partir de la definition de inc (fof inc ) 
+------------------------------------------------------- regle inc 
+*** nouvconcl(0, true, 17) 
+*** car hyp(0, app(z6, z5), 16), concl(0, app(z6, z5), 14) 
+*** explication : la conclusion app(z6, z5) a demontrer est une hypothese 
+------------------------------------------------------- regle stop_hyp_concl 
+le theoreme initial 0 est donc demontre
+* * * * * * * * * * * * * * * * * * * * * * * *

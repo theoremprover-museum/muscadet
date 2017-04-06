@@ -1,0 +1,154 @@
+
+machine:fdop
+********************************************************************************
+theoreme a demontrer 
+![A]:pre_order(subset, power_set(A)) 
+-------------------------------------------------------                      
+theoreme 0 demontre (pre_order) en 0.02 secondes
+================================================================================
+
+
+*************************************
+* etapes utiles de la demonstration *
+*************************************
+ 
+
+* * * * * * * * * * * * * * * * * * * * * * * *
+dans ce qui suit, N est le numero d'un (sous-)theoreme
+         E est l'etape courante
+            ou l'etape ou une hypothese ou conclusion a ete ajoutee ou modifiee
+hyp(N,H,E) signifie que H est une hypothese du (sous-)theoreme N
+concl(N,C,E) signifie que C est la conclusion du (sous-)theoreme N 
+obj_ct(N,C) signifie que C est un objet cree ou une constante donnee 
+ajhyp(N,H,E) signifie ajouter H comme nouvelle hypothese pour N 
+nouvconcl(N,C,E) signifie que la nouvelle conclusion de N est C
+           (C remplace la conclusion precedente)
+un sous-theoreme N-i ou N+i est un sous-theoreme du (sous-)theoreme N 
+   N est demontre si tous les N-i ont ete demontres (noeud-&)
+             ou si un N+i a ete demontre (noeud-|)
+le theoreme initial a pour numero 0
+
+* * * theoreme a demontrer
+![A]:pre_order(subset, power_set(A))
+
+* * * demonstration :
+
+* * * * * * theoreme 0 * * * * * *
+*** nouvconcl(0, ![A]:pre_order(subset, power_set(A)), 1) 
+*** explication : theoreme initial
+------------------------------------------------------- action ini 
+creer objet(s) z1  
+*** nouvconcl(0, pre_order(subset, power_set(z1)), 2) 
+*** car concl((0, ![A]:pre_order(subset, power_set(A))), 1) 
+*** explication : on instancie la(les) variable(s) universelle(s) de la conclusion
+------------------------------------------------------- regle ! 
+*** nouvconcl(0, seul(power_set(z1)::A, pre_order(subset, A)), 3) 
+*** car concl(0, pre_order(subset, power_set(z1)), 2) 
+*** explication : elimination des symboles fonctionnels dans la conclusion 
+par exemple, p(f(X)) est remplace par seul(f(X)::Y, p(Y)) 
+------------------------------------------------------- elifon
+*** ajhyp(0, power_set(z1)::z2, 4), nouvconcl(0, _, 4) 
+*** car concl(0, seul(power_set(z1)::A, pre_order(subset, A)), 3) 
+*** explication : creation de l'objet z2 et de sa definition 
+------------------------------------------------------- regle concl_seul 
+*** nouvconcl(0, ![A]: (member(A, z2)=> ..[subset, A, A])&![A, B, C]: (member(A, z2)&member(B, z2)&member(C, z2)=> ..[subset|...]& ..[subset|...]=> ..[subset, A|...]), 5) 
+*** car concl(0, pre_order(subset, z2), 4) 
+*** explication : on remplace la conclusion  pre_order(subset, z2)  par sa definition(fof pre_order ) 
+------------------------------------------------------- regle def_concl_pred 
+
+* * * * * * creation * * * * * * sous-theoreme 0-1 * * * * * 
+toutes les hypotheses du (sous-)theoreme 0 sont hypotheses du sous-theoreme 0-1 
+*** nouvconcl(0-1, ![A]: (member(A, z2)=> ..[subset, A, A]), 6) 
+*** car concl(0, ![A]: (member(A, z2)=> ..[subset, A, A])&![A, B, C]: (member(A, z2)&member(B, z2)&member(C, z2)=> ..[subset|...]& ..[subset|...]=> ..[subset, A|...]), 5) 
+*** explication : pour demontrer une conjonction, on demontre successivement tous les elements de la conjonction
+------------------------------------------------------- action demconj 
+creer objet(s) z3  
+*** nouvconcl(0-1, member(z3, z2)=> ..[subset, z3, z3], 7) 
+*** car concl((0, ![A]: (member(A, z2)=> ..[subset, A, A])), 6) 
+*** explication : on instancie la(les) variable(s) universelle(s) de la conclusion
+------------------------------------------------------- regle ! 
+*** ajhyp(0-1, member(z3, z2), 8) 
+*** nouvconcl(0-1, subset(z3, z3), 8) 
+*** car concl(0-1, member(z3, z2)=> ..[subset, z3, z3], 7) 
+*** explication : pour demontrer H=>C, on suppose H et on doit demontrer C
+------------------------------------------------------- regle => 
+*** nouvconcl(0-1, ![A]: (member(A, z3)=>member(A, z3)), 10) 
+*** car concl(0-1, subset(z3, z3), 8) 
+*** explication : on remplace la conclusion  subset(z3, z3)  par sa definition(fof subset ) 
+------------------------------------------------------- regle def_concl_pred 
+creer objet(s) z4  
+*** nouvconcl(0-1, member(z4, z3)=>member(z4, z3), 11) 
+*** car concl((0, ![A]: (member(A, z3)=>member(A, z3))), 10) 
+*** explication : on instancie la(les) variable(s) universelle(s) de la conclusion
+------------------------------------------------------- regle ! 
+*** ajhyp(0-1, member(z4, z3), 12) 
+*** nouvconcl(0-1, member(z4, z3), 12) 
+*** car concl(0-1, member(z4, z3)=>member(z4, z3), 11) 
+*** explication : pour demontrer H=>C, on suppose H et on doit demontrer C
+------------------------------------------------------- regle => 
+*** nouvconcl(0-1, true, 13) 
+*** car hyp(0-1, member(z4, z3), 12), concl(0-1, member(z4, z3), 12) 
+*** explication : la conclusion member(z4, z3) a demontrer est une hypothese 
+------------------------------------------------------- regle stop_hyp_concl 
+*** nouvconcl(0, ![A, B, C]: (member(A, z2)&member(B, z2)&member(C, z2)=> ..[subset, A|...]& ..[subset, B|...]=> ..[subset, A, C]), 14) 
+*** car concl(0-1, true, 13) 
+*** explication : la conclusion ![A]: (member(A, z2)=> ..[subset, A, A]) du (sous-)theoreme 0 a ete demontree ( sous-theoreme 0-1 ) 
+------------------------------------------------------- action retourdem 
+
+* * * * * * creation * * * * * * sous-theoreme 0-2 * * * * * 
+toutes les hypotheses du (sous-)theoreme 0 sont hypotheses du sous-theoreme 0-2 
+*** nouvconcl(0-2, ![A, B, C]: (member(A, z2)&member(B, z2)&member(C, z2)=> ..[subset, A|...]& ..[subset, B|...]=> ..[subset, A, C]), 15) 
+*** explication : demonstration du dernier element de la conjonction
+------------------------------------------------------- action demconj 
+creer objet(s) z7 z6 z5  
+*** nouvconcl(0-2, member(z5, z2)&member(z6, z2)&member(z7, z2)=> ..[subset, z5, z6]& ..[subset, z6, z7]=> ..[subset, z5, z7], 16) 
+*** car concl((0, ![A, B, C]: (member(A, z2)&member(B, z2)&member(C, z2)=> ..[subset|...]& ..[subset|...]=> ..[subset, A|...])), 15) 
+*** explication : on instancie la(les) variable(s) universelle(s) de la conclusion
+------------------------------------------------------- regle ! 
+*** ajhyp(0-2, member(z5, z2), 17)  
+*** ajhyp(0-2, member(z6, z2), 17)  
+*** ajhyp(0-2, member(z7, z2), 17) 
+*** nouvconcl(0-2, ..[subset, z5, z6]& ..[subset, z6, z7]=> ..[subset, z5, z7], 17) 
+*** car concl(0-2, member(z5, z2)&member(z6, z2)&member(z7, z2)=> ..[subset, z5, z6]& ..[subset, z6, z7]=> ..[subset, z5, z7], 16) 
+*** explication : pour demontrer H=>C, on suppose H et on doit demontrer C
+------------------------------------------------------- regle => 
+*** ajhyp(0-2, subset(z5, z6), 18)  
+*** ajhyp(0-2, subset(z6, z7), 18) 
+*** nouvconcl(0-2, subset(z5, z7), 18) 
+*** car concl(0-2, ..[subset, z5, z6]& ..[subset, z6, z7]=> ..[subset, z5, z7], 17) 
+*** explication : pour demontrer H=>C, on suppose H et on doit demontrer C
+------------------------------------------------------- regle => 
+*** nouvconcl(0-2, ![A]: (member(A, z5)=>member(A, z7)), 22) 
+*** car concl(0-2, subset(z5, z7), 18) 
+*** explication : on remplace la conclusion  subset(z5, z7)  par sa definition(fof subset ) 
+------------------------------------------------------- regle def_concl_pred 
+creer objet(s) z8  
+*** nouvconcl(0-2, member(z8, z5)=>member(z8, z7), 23) 
+*** car concl((0, ![A]: (member(A, z5)=>member(A, z7))), 22) 
+*** explication : on instancie la(les) variable(s) universelle(s) de la conclusion
+------------------------------------------------------- regle ! 
+*** ajhyp(0-2, member(z8, z5), 24) 
+*** nouvconcl(0-2, member(z8, z7), 24) 
+*** car concl(0-2, member(z8, z5)=>member(z8, z7), 23) 
+*** explication : pour demontrer H=>C, on suppose H et on doit demontrer C
+------------------------------------------------------- regle => 
+*** ajhyp(0-2, member(z8, z6), 25) 
+*** car hyp(0-2, subset(z5, z6), 18), hyp(0-2, member(z8, z5), 24), obj_ct(0-2, z8) 
+*** explication : regle2 si (hyp(A, subset(B, D), _), hyp(A, member(C, B), _), obj_ct(A, C))alors ajhyp(A, member(C, D), _) 
+construite a partir de la definition de subset (fof subset ) 
+------------------------------------------------------- regle subset 
+*** ajhyp(0-2, member(z8, z7), 26) 
+*** car hyp(0-2, subset(z6, z7), 18), hyp(0-2, member(z8, z6), 25), obj_ct(0-2, z8) 
+*** explication : regle2 si (hyp(A, subset(B, D), _), hyp(A, member(C, B), _), obj_ct(A, C))alors ajhyp(A, member(C, D), _) 
+construite a partir de la definition de subset (fof subset ) 
+------------------------------------------------------- regle subset 
+*** nouvconcl(0-2, true, 27) 
+*** car hyp(0-2, member(z8, z7), 26), concl(0-2, member(z8, z7), 24) 
+*** explication : la conclusion member(z8, z7) a demontrer est une hypothese 
+------------------------------------------------------- regle stop_hyp_concl 
+*** nouvconcl(0, true, 28) 
+*** car concl(0-2, true, 27) 
+*** explication : la conclusion ![A, B, C]: (member(A, z2)&member(B, z2)&member(C, z2)=> ..[subset, A, B]& ..[subset, B, C]=> ..[subset, A, C]) du (sous-)theoreme 0 a ete demontree ( sous-theoreme 0-2 ) 
+------------------------------------------------------- action retourdem 
+le theoreme initial 0 est donc demontre
+* * * * * * * * * * * * * * * * * * * * * * * *

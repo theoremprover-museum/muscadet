@@ -1,0 +1,11 @@
+:- op(200, xfy, subset).
+:- op(200, xfy, equal_set).
+:- op(150,xfx,inter).
+:- op(200, xfy, elt).
+definition(A subset B <=> ! [X]:(X elt A => X elt B)).
+definition(A equal_set B <=> A subset B & B subset A).
+definition(powerset(A) = [X , X subset A]).
+definition(A inter B  =  [X , X elt A  &  X elt B]).
+%the power set of an intersection is equal to the intersection of the power sets
+theorem(thI21,![A,B] : (powerset(A inter B) equal_set powerset(A) inter  powerset(B))).
++++(elt).

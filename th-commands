@@ -1,0 +1,58 @@
+To prove a theorem
+
+1 - Direct proof (under Prolog)
+--------------------------------------
+The Unix script musca-en invokes Prolog and loads the file muscadet-en
+call :
+	prove(<theorem to be proved>).
+after having given definitions if necessary : 
+	assert(definition(<definition>)).
+and eventually defined infix operator :
+        op(<precedence>, <type>, <name>).
+
+Example :
+	prove(p => p).
+Example1 :
+	assert(definition(subset(A,B) <=> ! [X]:(elt(X,A) => elt(X,B)))).
+        demontrer(![A,B,C]:(subset(A,B) & subset(B,C) => subset(A,C))).
+Example1bis :
+	op(200, xfy, elt).
+	op(200, xfy, subset).
+	assert(definition(A subset B <=> ! [X]:(X elt A => X elt B))).
+	demontrer(![A,B,C]:(A subset B & B subset C => A subset C)).
+
+2 - From files containing theorems and definitions
+--------------------------------------------------
+              under Linux                      under Prolog 
+              ----------                      -----------
+           th <file> [<options>)       th(<file>[,<options>]).
+examples : th examples/example1           th('examples/example1').
+           th file 50 +tr              th('examples/example1',50,+trs).
+           th file -pr +szs            th('examples/example1',-pr,+szs).
+
+available options are
+	a limit time
+	+tr to display the trace of the complete search of the proof
+	+pr            the proof (only the useful steps) (default option)
+	+szs           the result using the SZS ontology
+	-tr -pr -szs to not display
+
+where <file> contains data in the form
+	:- op(<precedence>, <type>, <name>). if necessary, before reading <name>
+	definition(<statement>).
+        theorem(<name>,<statement>).
+        include(<file>) to read data in another file
+
+examples/example1 :
+definition(subset(A,B) <=> ! [X]:(elt(X,A) => elt(X,B))).
+theorem(thI03, ![A,B,C]:(subset(A,B) & subset(B,C) => subset(A,C))).
+
+examples/example2 :
+include(examples/example2_definitions).
+% transitivity of subset
+theorem(thI03,![A,B,C]:(subset(A,B) & subset(B,C) => subset(A,C))).
+%the power set of an intersection is equal to the intersection of the power sets
+theorem(thI21,![A,B]:subset(parties(inter(A,B)),inter(parties(A),parties(B)))).
+
+Other examples, in particular in second order, are in the directory examples, 
+so as proofs.

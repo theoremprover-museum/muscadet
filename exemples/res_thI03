@@ -1,0 +1,80 @@
+
+machine:fdop
+********************************************************************************
+theoreme a demontrer 
+![A, B, C]: (inc(A, B)&inc(B, C)=>inc(A, C)) 
+-------------------------------------------------------             
+theoreme 0 demontre (thI03) en 0.03 secondes
+================================================================================
+
+
+*************************************
+* etapes utiles de la demonstration *
+*************************************
+ 
+
+* * * * * * * * * * * * * * * * * * * * * * * *
+dans ce qui suit, N est le numero d'un (sous-)theoreme
+         E est l'etape courante
+            ou l'etape ou une hypothese ou conclusion a ete ajoutee ou modifiee
+hyp(N,H,E) signifie que H est une hypothese du (sous-)theoreme N
+concl(N,C,E) signifie que C est la conclusion du (sous-)theoreme N 
+obj_ct(N,C) signifie que C est un objet cree ou une constante donnee 
+ajhyp(N,H,E) signifie ajouter H comme nouvelle hypothese pour N 
+nouvconcl(N,C,E) signifie que la nouvelle conclusion de N est C
+           (C remplace la conclusion precedente)
+un sous-theoreme N-i ou N+i est un sous-theoreme du (sous-)theoreme N 
+   N est demontre si tous les N-i ont ete demontres (noeud-&)
+             ou si un N+i a ete demontre (noeud-|)
+le theoreme initial a pour numero 0
+
+* * * theoreme a demontrer
+![A, B, C]: (inc(A, B)&inc(B, C)=>inc(A, C))
+
+* * * demonstration :
+
+* * * * * * theoreme 0 * * * * * *
+*** nouvconcl(0, ![A, B, C]: (inc(A, B)&inc(B, C)=>inc(A, C)), 1) 
+*** explication : theoreme initial
+------------------------------------------------------- action ini 
+creer objet(s) z3 z2 z1  
+*** nouvconcl(0, inc(z1, z2)&inc(z2, z3)=>inc(z1, z3), 2) 
+*** car concl((0, ![A, B, C]: (inc(A, B)&inc(B, C)=>inc(A, C))), 1) 
+*** explication : on instancie la(les) variable(s) universelle(s) de la conclusion
+------------------------------------------------------- regle ! 
+*** ajhyp(0, inc(z1, z2), 3)  
+*** ajhyp(0, inc(z2, z3), 3) 
+*** nouvconcl(0, inc(z1, z3), 3) 
+*** car concl(0, inc(z1, z2)&inc(z2, z3)=>inc(z1, z3), 2) 
+*** explication : pour demontrer H=>C, on suppose H et on doit demontrer C
+------------------------------------------------------- regle => 
+*** nouvconcl(0, ![A]: (app(A, z1)=>app(A, z3)), 4) 
+*** car concl(0, inc(z1, z3), 3) 
+*** explication : on remplace la conclusion  inc(z1, z3)  par sa definition(fof inc ) 
+------------------------------------------------------- regle def_concl_pred 
+creer objet(s) z4  
+*** nouvconcl(0, app(z4, z1)=>app(z4, z3), 5) 
+*** car concl((0, ![A]: (app(A, z1)=>app(A, z3))), 4) 
+*** explication : on instancie la(les) variable(s) universelle(s) de la conclusion
+------------------------------------------------------- regle ! 
+*** ajhyp(0, app(z4, z1), 6) 
+*** nouvconcl(0, app(z4, z3), 6) 
+*** car concl(0, app(z4, z1)=>app(z4, z3), 5) 
+*** explication : pour demontrer H=>C, on suppose H et on doit demontrer C
+------------------------------------------------------- regle => 
+*** ajhyp(0, app(z4, z2), 7) 
+*** car hyp(0, inc(z1, z2), 3), hyp(0, app(z4, z1), 6), obj_ct(0, z4) 
+*** explication : regle2 si (hyp(A, inc(B, D), _), hyp(A, app(C, B), _), obj_ct(A, C))alors ajhyp(A, app(C, D), _) 
+construite a partir de la definition de inc (fof inc ) 
+------------------------------------------------------- regle inc 
+*** ajhyp(0, app(z4, z3), 8) 
+*** car hyp(0, inc(z2, z3), 3), hyp(0, app(z4, z2), 7), obj_ct(0, z4) 
+*** explication : regle2 si (hyp(A, inc(B, D), _), hyp(A, app(C, B), _), obj_ct(A, C))alors ajhyp(A, app(C, D), _) 
+construite a partir de la definition de inc (fof inc ) 
+------------------------------------------------------- regle inc 
+*** nouvconcl(0, true, 9) 
+*** car hyp(0, app(z4, z3), 8), concl(0, app(z4, z3), 6) 
+*** explication : la conclusion app(z4, z3) a demontrer est une hypothese 
+------------------------------------------------------- regle stop_hyp_concl 
+le theoreme initial 0 est donc demontre
+* * * * * * * * * * * * * * * * * * * * * * * *

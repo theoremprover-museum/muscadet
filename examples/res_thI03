@@ -1,0 +1,80 @@
+
+machine:fdop
+********************************************************************************
+theorem to be proved 
+![A, B, C]: (subset(A, B)&subset(B, C)=>subset(A, C)) 
+-------------------------------------------------------             
+theorem 0 proved (thI03) in 0.03 seconds
+================================================================================
+
+
+*************************************
+*     useful steps of the proof     *
+*************************************
+ 
+
+* * * * * * * * * * * * * * * * * * * * * * * *
+in the following, N is the number of a (sub)theorem
+       E is the current step
+         or the step when a hypothesis or conclusion has been added or modified
+hyp(N,H,E) means that H is an hypothesis of (sub)theorem N
+concl(N,C,E) means that C is the conclusion of (sub)theorem N
+obj_ct(N,C) means that C is a created object or a given constant
+addhyp(N,H,E) means add H as a new hypothesis for N
+newconcl(N,C,E) means that the new conclusion of N is C
+           (C replaces the precedent conclusion)
+a subtheorem N-i or N+i is a subtheorem of the (sub)theorem N
+   N is proved if all N-i have been proved (&-node)
+             or if one N+i have been proved (|-node)
+the initial theorem is numbered 0
+
+* * * theorem to be proved
+![A, B, C]: (subset(A, B)&subset(B, C)=>subset(A, C))
+
+* * * proof :
+
+* * * * * * theoreme 0 * * * * * *
+*** newconcl(0, ![A, B, C]: (subset(A, B)&subset(B, C)=>subset(A, C)), 1) 
+*** explanation : initial theorem
+------------------------------------------------------- action ini 
+create object(s) z3 z2 z1  
+*** newconcl(0, subset(z1, z2)&subset(z2, z3)=>subset(z1, z3), 2) 
+*** because concl((0, ![A, B, C]: (subset(A, B)&subset(B, C)=>subset(A, C))), 1) 
+*** explanation : the universal variable(s) of the conclusion is(are) instantiated
+------------------------------------------------------- rule ! 
+*** addhyp(0, subset(z1, z2), 3)  
+*** addhyp(0, subset(z2, z3), 3) 
+*** newconcl(0, subset(z1, z3), 3) 
+*** because concl(0, subset(z1, z2)&subset(z2, z3)=>subset(z1, z3), 2) 
+*** explanation : to prove H=>C, assume H and prove C
+------------------------------------------------------- rule => 
+*** newconcl(0, ![A]: (elt(A, z1)=>elt(A, z3)), 4) 
+*** because concl(0, subset(z1, z3), 3) 
+*** explanation : the conclusion  subset(z1, z3) is replaced by its definition(fof subset ) 
+------------------------------------------------------- rule def_concl_pred 
+create object(s) z4  
+*** newconcl(0, elt(z4, z1)=>elt(z4, z3), 5) 
+*** because concl((0, ![A]: (elt(A, z1)=>elt(A, z3))), 4) 
+*** explanation : the universal variable(s) of the conclusion is(are) instantiated
+------------------------------------------------------- rule ! 
+*** addhyp(0, elt(z4, z1), 6) 
+*** newconcl(0, elt(z4, z3), 6) 
+*** because concl(0, elt(z4, z1)=>elt(z4, z3), 5) 
+*** explanation : to prove H=>C, assume H and prove C
+------------------------------------------------------- rule => 
+*** addhyp(0, elt(z4, z2), 7) 
+*** because hyp(0, subset(z1, z2), 3), hyp(0, elt(z4, z1), 6), obj_ct(0, z4) 
+*** explanation : rule if (hyp(A, subset(B, D), _), hyp(A, elt(C, B), _), obj_ct(A, C))then addhyp(A, elt(C, D), _) 
+built from the definition of subset (fof subset ) 
+------------------------------------------------------- rule subset 
+*** addhyp(0, elt(z4, z3), 8) 
+*** because hyp(0, subset(z2, z3), 3), hyp(0, elt(z4, z2), 7), obj_ct(0, z4) 
+*** explanation : rule if (hyp(A, subset(B, D), _), hyp(A, elt(C, B), _), obj_ct(A, C))then addhyp(A, elt(C, D), _) 
+built from the definition of subset (fof subset ) 
+------------------------------------------------------- rule subset 
+*** newconcl(0, true, 9) 
+*** because hyp(0, elt(z4, z3), 8), concl(0, elt(z4, z3), 6) 
+*** explanation : the conclusion elt(z4, z3) to be proved is a hypothesis 
+------------------------------------------------------- rule stop_hyp_concl 
+then the initial theorem is proved
+* * * * * * * * * * * * * * * * * * * * * * * *

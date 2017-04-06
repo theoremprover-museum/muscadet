@@ -1,0 +1,40 @@
+To prove a theorem of the TPTP Library
+
+1) under Linux 
+   -----------
+Compile the C file tptp-en.c
+Run the executable with as first argument (mandatory) 
+   either a path to a TPTP problem file
+   or a TPTP problem name
+and with the following optional arguments, in whatever order,
+to modify the limit time, the display or language options :
+   a number given as an argument becomes the limit time
+   +tr to display the trace of the complete search of the proof
+   +pr           the proof (only the useful steps)
+   +szs           the result using the SZS ontology 
+   -tr -pr -szs to not display
+example : if the default options display the proof and the SZS code,
+             mention +tr -szs to obtain the trace and the proof 
+
+Some commands examples :
+   tptp /home/dominique/TPTP/TPTP-v4.0.1/Problems/SET/SET02+4.p
+   tptp SET027+4.p 50 fr +tr -szs
+   tptp SET027+4.p -tr -pr 100
+
+2) under Prolog
+   ------------
+Call the Unix script  musca-en. 
+You are then under SWI-Prolog and the file  muscadet-en is loaded. 
+Call the tptp predicat with as arguments the preceding arguments,
+with quotes if necessary, according to Prolog conventions
+Examples :
+   tptp('/home/dominique/TPTP/TPTP-v4.0.1/Problems/SET/SET02+4.p').
+   tptp('SET027+4.p', 50, fr, +tr, -szs).
+   tptp('SET027+4.p', -tr, -pr, 100).
+
+One can also call tptp with as argument the list of preceding the arguments
+(which then will be in an infinite number)
+Example :
+   tptp(['SET027+4.p', -tr, -pr, 100]).
+
+   

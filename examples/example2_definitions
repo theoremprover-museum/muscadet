@@ -1,0 +1,4 @@
+definition(subset(A,B) <=> ! [X]:(elt(X,A) => elt(X,B))).
+definition(equal_set(A,B) <=> subset(A,B) & subset(B,A)).
+definition(elt(X,powerset(A))<=> subset(X,A)).
+definition(elt(X,inter(A,B)) <=> elt(X,A) & elt(X,B)).

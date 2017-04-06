@@ -1,0 +1,8 @@
+:- op(200, xfy, elt).
+:- op(200, xfy, subset).
+:- op(200, xfy, equal_set).
+:- op(150,xfx,inter).
+definition(A subset B <=> ! [X]:(X elt A => X elt B)).
+definition(A equal_set B <=> A subset B & B subset A).
+definition((X elt powerset(A))<=> X subset A).
+definition(X elt  A inter B  <=>  X elt A  &  X elt B).

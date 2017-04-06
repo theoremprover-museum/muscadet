@@ -1,0 +1,9 @@
+include('examples/example2bis_definitions').
+:- op(200, xfy, elt).
+:- op(200, xfy, subset).
+:- op(200, xfy, equal_set).
+:- op(150,xfx,inter).
+% transitivity of subset
+theorem(thI03,![A,B,C]:(A subset B  &  B subset C  =>  A subset C)).
+%the power set of an intersection is equal to the intersection of the power sets
+theorem(thI21,![A,B] : (powerset(A inter B) equal_set powerset(A) inter  powerset(B))).

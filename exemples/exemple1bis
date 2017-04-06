@@ -1,0 +1,4 @@
+:- op(200, xfy, app).
+:- op(200, xfy, inc).
+definition(A inc B <=> ! [X]:(X app A => X app B)).
+theoreme(thI03,![A,B,C]:(A inc B & B inc C => A inc C)).

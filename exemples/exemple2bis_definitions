@@ -1,0 +1,8 @@
+:- op(200, xfy, app).
+:- op(200, xfy, inc).
+:- op(200, xfy, egal_ens).
+:- op(150,xfx,inter).
+definition(A inc B <=> ! [X]:(X app A => X app B)).
+definition(egal_ens(A,B) <=> inc(A,B) & inc(B,A)).
+definition((X app parties(A))<=> X inc A).
+definition(X app  A inter B  <=>  X app A  &  X app B).

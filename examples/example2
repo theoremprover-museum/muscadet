@@ -1,0 +1,5 @@
+include(examples/example2_definitions).
+% transitivity of subset
+theorem(thI03,![A,B,C]:(subset(A,B) & subset(B,C) => subset(A,C))).
+%the power set of an intersection is equal to the intersection of the power sets
+theorem(thI21,![A,B]:equal_set(powerset(inter(A,B)),inter(powerset(A),powerset(B)))).

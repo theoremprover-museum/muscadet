@@ -1,0 +1,105 @@
+
+machine:fdop
+********************************************************************************
+theorem to be proved 
+![A]:transitive(subset, powerset(A)) 
+-------------------------------------------------------                
+theorem 0 proved (trans) in 0.03 seconds
+================================================================================
+
+
+*************************************
+*     useful steps of the proof     *
+*************************************
+ 
+
+* * * * * * * * * * * * * * * * * * * * * * * *
+in the following, N is the number of a (sub)theorem
+       E is the current step
+         or the step when a hypothesis or conclusion has been added or modified
+hyp(N,H,E) means that H is an hypothesis of (sub)theorem N
+concl(N,C,E) means that C is the conclusion of (sub)theorem N
+obj_ct(N,C) means that C is a created object or a given constant
+addhyp(N,H,E) means add H as a new hypothesis for N
+newconcl(N,C,E) means that the new conclusion of N is C
+           (C replaces the precedent conclusion)
+a subtheorem N-i or N+i is a subtheorem of the (sub)theorem N
+   N is proved if all N-i have been proved (&-node)
+             or if one N+i have been proved (|-node)
+the initial theorem is numbered 0
+
+* * * theorem to be proved
+![A]:transitive(subset, powerset(A))
+
+* * * proof :
+
+* * * * * * theoreme 0 * * * * * *
+*** newconcl(0, ![A]:transitive(subset, powerset(A)), 1) 
+*** explanation : initial theorem
+------------------------------------------------------- action ini 
+create object(s) z1  
+*** newconcl(0, transitive(subset, powerset(z1)), 2) 
+*** because concl((0, ![A]:transitive(subset, powerset(A))), 1) 
+*** explanation : the universal variable(s) of the conclusion is(are) instantiated
+------------------------------------------------------- rule ! 
+*** newconcl(0, seul(powerset(z1)::A, transitive(subset, A)), 3) 
+*** because concl(0, transitive(subset, powerset(z1)), 2) 
+*** explanation : elimination of the functional symbols of the conclusion 
+for example, p(f(X)) is replaced by only(f(X)::Y, p(Y)) 
+------------------------------------------------------- elifun
+*** addhyp(0, powerset(z1)::z2, 4), newconcl(0, _, 4) 
+*** because concl(0, seul(powerset(z1)::A, transitive(subset, A)), 3) 
+*** explanation : creation of object z2 and of its definition 
+------------------------------------------------------- rule concl_only 
+*** newconcl(0, ![A, B, C]: (elt(A, z2)&elt(B, z2)&elt(C, z2)=> ..[subset, A|...]& ..[subset, B|...]=> ..[subset, A, C]), 5) 
+*** because concl(0, transitive(subset, z2), 4) 
+*** explanation : the conclusion  transitive(subset, z2) is replaced by its definition(fof transitive ) 
+------------------------------------------------------- rule def_concl_pred 
+create object(s) z5 z4 z3  
+*** newconcl(0, elt(z3, z2)&elt(z4, z2)&elt(z5, z2)=> ..[subset, z3, z4]& ..[subset, z4, z5]=> ..[subset, z3, z5], 6) 
+*** because concl((0, ![A, B, C]: (elt(A, z2)&elt(B, z2)&elt(C, z2)=> ..[subset|...]& ..[subset|...]=> ..[subset, A|...])), 5) 
+*** explanation : the universal variable(s) of the conclusion is(are) instantiated
+------------------------------------------------------- rule ! 
+*** addhyp(0, elt(z3, z2), 7)  
+*** addhyp(0, elt(z4, z2), 7)  
+*** addhyp(0, elt(z5, z2), 7) 
+*** newconcl(0, ..[subset, z3, z4]& ..[subset, z4, z5]=> ..[subset, z3, z5], 7) 
+*** because concl(0, elt(z3, z2)&elt(z4, z2)&elt(z5, z2)=> ..[subset, z3, z4]& ..[subset, z4, z5]=> ..[subset, z3, z5], 6) 
+*** explanation : to prove H=>C, assume H and prove C
+------------------------------------------------------- rule => 
+*** addhyp(0, subset(z3, z4), 8)  
+*** addhyp(0, subset(z4, z5), 8) 
+*** newconcl(0, subset(z3, z5), 8) 
+*** because concl(0, ..[subset, z3, z4]& ..[subset, z4, z5]=> ..[subset, z3, z5], 7) 
+*** explanation : to prove H=>C, assume H and prove C
+------------------------------------------------------- rule => 
+*** newconcl(0, ![A]: (elt(A, z3)=>elt(A, z5)), 12) 
+*** because concl(0, subset(z3, z5), 8) 
+*** explanation : the conclusion  subset(z3, z5) is replaced by its definition(fof subset ) 
+------------------------------------------------------- rule def_concl_pred 
+create object(s) z6  
+*** newconcl(0, elt(z6, z3)=>elt(z6, z5), 13) 
+*** because concl((0, ![A]: (elt(A, z3)=>elt(A, z5))), 12) 
+*** explanation : the universal variable(s) of the conclusion is(are) instantiated
+------------------------------------------------------- rule ! 
+*** addhyp(0, elt(z6, z3), 14) 
+*** newconcl(0, elt(z6, z5), 14) 
+*** because concl(0, elt(z6, z3)=>elt(z6, z5), 13) 
+*** explanation : to prove H=>C, assume H and prove C
+------------------------------------------------------- rule => 
+*** addhyp(0, elt(z6, z4), 15) 
+*** because hyp(0, subset(z3, z4), 8), hyp(0, elt(z6, z3), 14), obj_ct(0, z6) 
+*** explanation : rule if (hyp(A, subset(B, D), _), hyp(A, elt(C, B), _), obj_ct(A, C))then addhyp(A, elt(C, D), _) 
+built from the definition of subset (fof subset ) 
+------------------------------------------------------- rule subset 
+*** addhyp(0, elt(z6, z5), 16) 
+*** because hyp(0, subset(z4, z5), 8), hyp(0, elt(z6, z4), 15), obj_ct(0, z6) 
+*** explanation : rule if (hyp(A, subset(B, D), _), hyp(A, elt(C, B), _), obj_ct(A, C))then addhyp(A, elt(C, D), _) 
+built from the definition of subset (fof subset ) 
+------------------------------------------------------- rule subset 
+*** newconcl(0, true, 17) 
+*** because hyp(0, elt(z6, z5), 16), concl(0, elt(z6, z5), 14) 
+*** explanation : the conclusion elt(z6, z5) to be proved is a hypothesis 
+------------------------------------------------------- rule stop_hyp_concl 
+then the initial theorem is proved
+* * * * * * * * * * * * * * * * * * * * * * * *

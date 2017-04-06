@@ -1,0 +1,275 @@
+
+machine:fdop
+********************************************************************************
+theorem to be proved 
+![A, B]:equal_set(powerset(inter(A, B)), inter(powerset(A), powerset(B))) 
+-------------------------------------------------------                      
+theorem 0 proved (thI03) in 0.05 seconds
+================================================================================
+
+
+*************************************
+*     useful steps of the proof     *
+*************************************
+ 
+
+* * * * * * * * * * * * * * * * * * * * * * * *
+in the following, N is the number of a (sub)theorem
+       E is the current step
+         or the step when a hypothesis or conclusion has been added or modified
+hyp(N,H,E) means that H is an hypothesis of (sub)theorem N
+concl(N,C,E) means that C is the conclusion of (sub)theorem N
+obj_ct(N,C) means that C is a created object or a given constant
+addhyp(N,H,E) means add H as a new hypothesis for N
+newconcl(N,C,E) means that the new conclusion of N is C
+           (C replaces the precedent conclusion)
+a subtheorem N-i or N+i is a subtheorem of the (sub)theorem N
+   N is proved if all N-i have been proved (&-node)
+             or if one N+i have been proved (|-node)
+the initial theorem is numbered 0
+
+* * * theorem to be proved
+![A, B]:equal_set(powerset(inter(A, B)), inter(powerset(A), powerset(B)))
+
+* * * proof :
+
+* * * * * * theoreme 0 * * * * * *
+*** newconcl(0, ![A, B]:equal_set(powerset(inter(A, B)), inter(powerset(A), powerset(B))), 1) 
+*** explanation : initial theorem
+------------------------------------------------------- action ini 
+create object(s) z2 z1  
+*** newconcl(0, equal_set(powerset(inter(z1, z2)), inter(powerset(z1), powerset(z2))), 2) 
+*** because concl((0, ![A, B]:equal_set(powerset(inter(A, B)), inter(powerset(A), powerset(B)))), 1) 
+*** explanation : the universal variable(s) of the conclusion is(are) instantiated
+------------------------------------------------------- rule ! 
+*** newconcl(0, seul(inter(z1, z2)::A, seul(powerset(A)::D, seul(powerset(z1)::B, seul(powerset(z2)::C, seul(inter(B, C)::E, equal_set(D, E)))))), 3) 
+*** because concl(0, equal_set(powerset(inter(z1, z2)), inter(powerset(z1), powerset(z2))), 2) 
+*** explanation : elimination of the functional symbols of the conclusion 
+for example, p(f(X)) is replaced by only(f(X)::Y, p(Y)) 
+------------------------------------------------------- elifun
+*** addhyp(0, inter(z1, z2)::z3, 4), newconcl(0, _, 4) 
+*** because concl(0, seul(inter(z1, z2)::A, seul(powerset(A)::D, seul(powerset(z1)::B, seul(powerset(z2)::C, seul(inter(B, C)::E, equal_set(D, E)))))), 3) 
+*** explanation : creation of object z3 and of its definition 
+------------------------------------------------------- rule concl_only 
+*** addhyp(0, powerset(z3)::z4, 5), newconcl(0, _, 5) 
+*** because concl(0, seul(powerset(z3)::C, seul(powerset(z1)::A, seul(powerset(z2)::B, seul(inter(A, B)::D, equal_set(C, D))))), 4) 
+*** explanation : creation of object z4 and of its definition 
+------------------------------------------------------- rule concl_only 
+*** addhyp(0, powerset(z1)::z5, 6), newconcl(0, _, 6) 
+*** because concl(0, seul(powerset(z1)::A, seul(powerset(z2)::B, seul(inter(A, B)::C, equal_set(z4, C)))), 5) 
+*** explanation : creation of object z5 and of its definition 
+------------------------------------------------------- rule concl_only 
+*** addhyp(0, powerset(z2)::z6, 7), newconcl(0, _, 7) 
+*** because concl(0, seul(powerset(z2)::A, seul(inter(z5, A)::B, equal_set(z4, B))), 6) 
+*** explanation : creation of object z6 and of its definition 
+------------------------------------------------------- rule concl_only 
+*** addhyp(0, inter(z5, z6)::z7, 8), newconcl(0, _, 8) 
+*** because concl(0, seul(inter(z5, z6)::A, equal_set(z4, A)), 7) 
+*** explanation : creation of object z7 and of its definition 
+------------------------------------------------------- rule concl_only 
+*** newconcl(0, subset(z4, z7)&subset(z7, z4), 9) 
+*** because concl(0, equal_set(z4, z7), 8) 
+*** explanation : the conclusion  equal_set(z4, z7) is replaced by its definition(fof equal_set ) 
+------------------------------------------------------- rule def_concl_pred 
+
+* * * * * * creation * * * * * * sub-theoreme 0-1 * * * * * 
+all the hypotheses of (sub)theorem 0 are hypotheses of subtheorem 0-1 
+*** newconcl(0-1, subset(z4, z7), 10) 
+*** because concl(0, subset(z4, z7)&subset(z7, z4), 9) 
+*** explanation : to prove a conjunction, prove all the elements of the conjunction
+------------------------------------------------------- action proconj 
+*** newconcl(0-1, ![A]: (elt(A, z4)=>elt(A, z7)), 11) 
+*** because concl(0-1, subset(z4, z7), 10) 
+*** explanation : the conclusion  subset(z4, z7) is replaced by its definition(fof subset ) 
+------------------------------------------------------- rule def_concl_pred 
+create object(s) z8  
+*** newconcl(0-1, elt(z8, z4)=>elt(z8, z7), 12) 
+*** because concl((0, ![A]: (elt(A, z4)=>elt(A, z7))), 11) 
+*** explanation : the universal variable(s) of the conclusion is(are) instantiated
+------------------------------------------------------- rule ! 
+*** addhyp(0-1, elt(z8, z4), 13) 
+*** newconcl(0-1, elt(z8, z7), 13) 
+*** because concl(0-1, elt(z8, z4)=>elt(z8, z7), 12) 
+*** explanation : to prove H=>C, assume H and prove C
+------------------------------------------------------- rule => 
+*** addhyp(0-1, subset(z8, z3), 14) 
+*** because hyp(0-1, powerset(z3)::z4, 5), hyp(0-1, elt(z8, z4), 13), obj_ct(0-1, z8) 
+*** explanation : rule if (hyp(A, powerset(D)::B, _), hyp(A, elt(C, B), _), obj_ct(A, C))then addhyp(A, subset(C, D), _) 
+built from the definition of powerset (fof elt ) 
+------------------------------------------------------- rule powerset 
+*** newconcl(0-1, elt(z8, z5)&elt(z8, z6), 15) 
+*** because concl(0-1, elt(z8, z7), 13), hyp(0-1, inter(z5, z6)::z7, 8) 
+*** explanation : definition elt 
+------------------------------------------------------- rule defconcl_rel 
+
+* * * * * * creation * * * * * * sub-theoreme 0-1-1 * * * * * 
+all the hypotheses of (sub)theorem 0-1 are hypotheses of subtheorem 0-1-1 
+*** newconcl(0-1-1, elt(z8, z5), 16) 
+*** because concl(0-1, elt(z8, z5)&elt(z8, z6), 15) 
+*** explanation : to prove a conjunction, prove all the elements of the conjunction
+------------------------------------------------------- action proconj 
+*** newconcl(0-1-1, subset(z8, z1), 17) 
+*** because concl(0-1-1, elt(z8, z5), 16), hyp(0-1-1, powerset(z1)::z5, 6) 
+*** explanation : definition elt 
+------------------------------------------------------- rule defconcl_rel 
+*** newconcl(0-1-1, ![A]: (elt(A, z8)=>elt(A, z1)), 18) 
+*** because concl(0-1-1, subset(z8, z1), 17) 
+*** explanation : the conclusion  subset(z8, z1) is replaced by its definition(fof subset ) 
+------------------------------------------------------- rule def_concl_pred 
+create object(s) z9  
+*** newconcl(0-1-1, elt(z9, z8)=>elt(z9, z1), 19) 
+*** because concl((0, ![A]: (elt(A, z8)=>elt(A, z1))), 18) 
+*** explanation : the universal variable(s) of the conclusion is(are) instantiated
+------------------------------------------------------- rule ! 
+*** addhyp(0-1-1, elt(z9, z8), 20) 
+*** newconcl(0-1-1, elt(z9, z1), 20) 
+*** because concl(0-1-1, elt(z9, z8)=>elt(z9, z1), 19) 
+*** explanation : to prove H=>C, assume H and prove C
+------------------------------------------------------- rule => 
+*** addhyp(0-1-1, elt(z9, z3), 21) 
+*** because hyp(0-1-1, subset(z8, z3), 14), hyp(0-1-1, elt(z9, z8), 20), obj_ct(0-1-1, z9) 
+*** explanation : rule if (hyp(A, subset(B, D), _), hyp(A, elt(C, B), _), obj_ct(A, C))then addhyp(A, elt(C, D), _) 
+built from the definition of subset (fof subset ) 
+------------------------------------------------------- rule subset 
+*** addhyp(0-1-1, elt(z9, z1), 22) 
+*** because hyp(0-1-1, inter(z1, z2)::z3, 4), hyp(0-1-1, elt(z9, z3), 21), obj_ct(0-1-1, z9) 
+*** explanation : rule if (hyp(A, inter(D, _)::B, _), hyp(A, elt(C, B), _), obj_ct(A, C))then addhyp(A, elt(C, D), _) 
+built from the definition of inter (fof elt ) 
+------------------------------------------------------- rule inter 
+*** newconcl(0-1-1, true, 23) 
+*** because hyp(0-1-1, elt(z9, z1), 22), concl(0-1-1, elt(z9, z1), 20) 
+*** explanation : the conclusion elt(z9, z1) to be proved is a hypothesis 
+------------------------------------------------------- rule stop_hyp_concl 
+*** newconcl(0-1, elt(z8, z6), 24) 
+*** because concl(0-1-1, true, 23) 
+*** explanation : the conclusion elt(z8, z5) of (sub)theorem 0-1 has been proved ( subtheorem/ 0-1-1 ) 
+------------------------------------------------------- action returnpro 
+
+* * * * * * creation * * * * * * sub-theoreme 0-1-2 * * * * * 
+all the hypotheses of (sub)theorem 0-1 are hypotheses of subtheorem 0-1-2 
+*** newconcl(0-1-2, elt(z8, z6), 25) 
+*** explanation : proof of the last element of the conjunction
+------------------------------------------------------- action proconj 
+*** newconcl(0-1-2, subset(z8, z2), 26) 
+*** because concl(0-1-2, elt(z8, z6), 25), hyp(0-1-2, powerset(z2)::z6, 7) 
+*** explanation : definition elt 
+------------------------------------------------------- rule defconcl_rel 
+*** newconcl(0-1-2, ![A]: (elt(A, z8)=>elt(A, z2)), 27) 
+*** because concl(0-1-2, subset(z8, z2), 26) 
+*** explanation : the conclusion  subset(z8, z2) is replaced by its definition(fof subset ) 
+------------------------------------------------------- rule def_concl_pred 
+create object(s) z10  
+*** newconcl(0-1-2, elt(z10, z8)=>elt(z10, z2), 28) 
+*** because concl((0, ![A]: (elt(A, z8)=>elt(A, z2))), 27) 
+*** explanation : the universal variable(s) of the conclusion is(are) instantiated
+------------------------------------------------------- rule ! 
+*** addhyp(0-1-2, elt(z10, z8), 29) 
+*** newconcl(0-1-2, elt(z10, z2), 29) 
+*** because concl(0-1-2, elt(z10, z8)=>elt(z10, z2), 28) 
+*** explanation : to prove H=>C, assume H and prove C
+------------------------------------------------------- rule => 
+*** addhyp(0-1-2, elt(z10, z3), 30) 
+*** because hyp(0-1-2, subset(z8, z3), 14), hyp(0-1-2, elt(z10, z8), 29), obj_ct(0-1-2, z10) 
+*** explanation : rule if (hyp(A, subset(B, D), _), hyp(A, elt(C, B), _), obj_ct(A, C))then addhyp(A, elt(C, D), _) 
+built from the definition of subset (fof subset ) 
+------------------------------------------------------- rule subset 
+*** addhyp(0-1-2, elt(z10, z2), 32) 
+*** because hyp(0-1-2, inter(z1, z2)::z3, 4), hyp(0-1-2, elt(z10, z3), 30), obj_ct(0-1-2, z10) 
+*** explanation : rule if (hyp(A, inter(_, D)::B, _), hyp(A, elt(C, B), _), obj_ct(A, C))then addhyp(A, elt(C, D), _) 
+built from the definition of inter (fof elt ) 
+------------------------------------------------------- rule inter1 
+*** newconcl(0-1-2, true, 33) 
+*** because hyp(0-1-2, elt(z10, z2), 32), concl(0-1-2, elt(z10, z2), 29) 
+*** explanation : the conclusion elt(z10, z2) to be proved is a hypothesis 
+------------------------------------------------------- rule stop_hyp_concl 
+*** newconcl(0-1, true, 34) 
+*** because concl(0-1-2, true, 33) 
+*** explanation : the conclusion elt(z8, z6) of (sub)theorem 0-1 has been proved ( subtheorem/ 0-1-2 ) 
+------------------------------------------------------- action returnpro 
+*** newconcl(0, subset(z7, z4), 35) 
+*** because concl(0-1, true, 34) 
+*** explanation : the conclusion subset(z4, z7) of (sub)theorem 0 has been proved ( subtheorem/ 0-1 ) 
+------------------------------------------------------- action returnpro 
+
+* * * * * * creation * * * * * * sub-theoreme 0-2 * * * * * 
+all the hypotheses of (sub)theorem 0 are hypotheses of subtheorem 0-2 
+*** newconcl(0-2, subset(z7, z4), 36) 
+*** explanation : proof of the last element of the conjunction
+------------------------------------------------------- action proconj 
+*** newconcl(0-2, ![A]: (elt(A, z7)=>elt(A, z4)), 37) 
+*** because concl(0-2, subset(z7, z4), 36) 
+*** explanation : the conclusion  subset(z7, z4) is replaced by its definition(fof subset ) 
+------------------------------------------------------- rule def_concl_pred 
+create object(s) z11  
+*** newconcl(0-2, elt(z11, z7)=>elt(z11, z4), 38) 
+*** because concl((0, ![A]: (elt(A, z7)=>elt(A, z4))), 37) 
+*** explanation : the universal variable(s) of the conclusion is(are) instantiated
+------------------------------------------------------- rule ! 
+*** addhyp(0-2, elt(z11, z7), 39) 
+*** newconcl(0-2, elt(z11, z4), 39) 
+*** because concl(0-2, elt(z11, z7)=>elt(z11, z4), 38) 
+*** explanation : to prove H=>C, assume H and prove C
+------------------------------------------------------- rule => 
+*** addhyp(0-2, elt(z11, z5), 40) 
+*** because hyp(0-2, inter(z5, z6)::z7, 8), hyp(0-2, elt(z11, z7), 39), obj_ct(0-2, z11) 
+*** explanation : rule if (hyp(A, inter(D, _)::B, _), hyp(A, elt(C, B), _), obj_ct(A, C))then addhyp(A, elt(C, D), _) 
+built from the definition of inter (fof elt ) 
+------------------------------------------------------- rule inter 
+*** addhyp(0-2, subset(z11, z1), 41) 
+*** because hyp(0-2, powerset(z1)::z5, 6), hyp(0-2, elt(z11, z5), 40), obj_ct(0-2, z11) 
+*** explanation : rule if (hyp(A, powerset(D)::B, _), hyp(A, elt(C, B), _), obj_ct(A, C))then addhyp(A, subset(C, D), _) 
+built from the definition of powerset (fof elt ) 
+------------------------------------------------------- rule powerset 
+*** addhyp(0-2, elt(z11, z6), 42) 
+*** because hyp(0-2, inter(z5, z6)::z7, 8), hyp(0-2, elt(z11, z7), 39), obj_ct(0-2, z11) 
+*** explanation : rule if (hyp(A, inter(_, D)::B, _), hyp(A, elt(C, B), _), obj_ct(A, C))then addhyp(A, elt(C, D), _) 
+built from the definition of inter (fof elt ) 
+------------------------------------------------------- rule inter1 
+*** addhyp(0-2, subset(z11, z2), 43) 
+*** because hyp(0-2, powerset(z2)::z6, 7), hyp(0-2, elt(z11, z6), 42), obj_ct(0-2, z11) 
+*** explanation : rule if (hyp(A, powerset(D)::B, _), hyp(A, elt(C, B), _), obj_ct(A, C))then addhyp(A, subset(C, D), _) 
+built from the definition of powerset (fof elt ) 
+------------------------------------------------------- rule powerset 
+*** newconcl(0-2, subset(z11, z3), 44) 
+*** because concl(0-2, elt(z11, z4), 39), hyp(0-2, powerset(z3)::z4, 5) 
+*** explanation : definition elt 
+------------------------------------------------------- rule defconcl_rel 
+*** newconcl(0-2, ![A]: (elt(A, z11)=>elt(A, z3)), 45) 
+*** because concl(0-2, subset(z11, z3), 44) 
+*** explanation : the conclusion  subset(z11, z3) is replaced by its definition(fof subset ) 
+------------------------------------------------------- rule def_concl_pred 
+create object(s) z12  
+*** newconcl(0-2, elt(z12, z11)=>elt(z12, z3), 46) 
+*** because concl((0, ![A]: (elt(A, z11)=>elt(A, z3))), 45) 
+*** explanation : the universal variable(s) of the conclusion is(are) instantiated
+------------------------------------------------------- rule ! 
+*** addhyp(0-2, elt(z12, z11), 47) 
+*** newconcl(0-2, elt(z12, z3), 47) 
+*** because concl(0-2, elt(z12, z11)=>elt(z12, z3), 46) 
+*** explanation : to prove H=>C, assume H and prove C
+------------------------------------------------------- rule => 
+*** addhyp(0-2, elt(z12, z1), 48) 
+*** because hyp(0-2, subset(z11, z1), 41), hyp(0-2, elt(z12, z11), 47), obj_ct(0-2, z12) 
+*** explanation : rule if (hyp(A, subset(B, D), _), hyp(A, elt(C, B), _), obj_ct(A, C))then addhyp(A, elt(C, D), _) 
+built from the definition of subset (fof subset ) 
+------------------------------------------------------- rule subset 
+*** addhyp(0-2, elt(z12, z2), 49) 
+*** because hyp(0-2, subset(z11, z2), 43), hyp(0-2, elt(z12, z11), 47), obj_ct(0-2, z12) 
+*** explanation : rule if (hyp(A, subset(B, D), _), hyp(A, elt(C, B), _), obj_ct(A, C))then addhyp(A, elt(C, D), _) 
+built from the definition of subset (fof subset ) 
+------------------------------------------------------- rule subset 
+*** addhyp(0-2, elt(z12, z3), 50) 
+*** because hyp(0-2, inter(z1, z2)::z3, 4), hyp(0-2, elt(z12, z1), 48), hyp(0-2, elt(z12, z2), 49), obj_ct(0-2, z12) 
+*** explanation : rule if (hyp(A, inter(B, D)::E, _), hyp(A, elt(C, B), _), hyp(A, elt(C, D), _), obj_ct(A, C))then addhyp(A, elt(C, E), _) 
+built from the definition of inter (fof elt ) 
+------------------------------------------------------- rule inter2 
+*** newconcl(0-2, true, 51) 
+*** because hyp(0-2, elt(z12, z3), 50), concl(0-2, elt(z12, z3), 47) 
+*** explanation : the conclusion elt(z12, z3) to be proved is a hypothesis 
+------------------------------------------------------- rule stop_hyp_concl 
+*** newconcl(0, true, 52) 
+*** because concl(0-2, true, 51) 
+*** explanation : the conclusion subset(z7, z4) of (sub)theorem 0 has been proved ( subtheorem/ 0-2 ) 
+------------------------------------------------------- action returnpro 
+then the initial theorem is proved
+* * * * * * * * * * * * * * * * * * * * * * * *

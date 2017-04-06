@@ -1,0 +1,2 @@
+definition(subset(A,B) <=> ! [X]:(elt(X,A) => elt(X,B))).
+theorem(thI03, ![A,B,C]:(subset(A,B) & subset(B,C) => subset(A,C))).

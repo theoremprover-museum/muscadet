@@ -1,0 +1,41 @@
+Pour demontrer un théorème de la base TPTP
+
+1) sous Linux 
+   ----------
+Compiler le fichier C tptp-fr.c
+Appeler l'exécutable tptp avec comme premier argument (obligatoire) 
+   soit un chemin vers un fichier de probleme TPTP 
+   soit un nom de probleme TPTP
+et avec des arguments optionnels suivants, dans n'importe quel ordre, 
+pour modifier le temps limite, les options d'affichage ou le langage :
+   un nombre donne en argument devient le temps limite
+   +tr pour afficher la trace complète de la recherche
+   +pr              la preuve (uniquement les étapes utiles) (par défaut)
+   +szs              le resultat selon l'ontologie SZS
+   -tr -pr -szs pour ne pas afficher
+exemple : si les options par défaut sont d'afficher la preuve et le code SZS,
+             on indiquera +tr -szs pour avoir la trace et la preuve 
+
+Exemples de commandes :
+   tptp /home/dominique/TPTP/TPTP-v4.0.1/Problems/SET/SET02+4.p
+   tptp SET027+4.p 50 en +tr -szs
+   tptp SET027+4.p -tr -pr 100
+
+2) sous Prolog
+   -----------
+Appeler le script Unix musca-fr
+On est alors sous SWI-prolog et le fichier muscadet-fr est chargé.
+Appeler le prédicat tptp avec comme arguments les arguments précédents,
+avec des quotes si nécessaire, selon les conventions de Prolog 
+Exemples :
+   tptp('/home/dominique/TPTP/TPTP-v4.0.1/Problems/SET/SET02+4.p').
+   tptp('SET027+4.p', 50, en, +tr, -szs).
+   tptp('SET027+4.p', -tr, -pr, 100).
+
+On peut aussi appeler tptp avec comme argument la liste des arguments
+ précédents (qui seront alors en nombre illimité)
+Exemple :
+   tptp(['SET027+4.p', -tr, -pr, 100]).
+
+
+   

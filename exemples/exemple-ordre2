@@ -1,0 +1,7 @@
+theoreme(trans,![A]:transitive(inc, parties(A))).
+definition(transitive(R,E) <=>
+            ![X,Y,Z]:(app(X,E) & app(Y,E) & app(Z,E) =>
+                        (..[R,X,Y] & ..[R,Y,Z] => ..[R,X,Z]))).
+definition( inc(A,B) <=> ! [X] : ( app(X,A) => app(X,B) ) ) .
+definition(  app(X,parties(A)) <=> inc(X,A) ) .
+

@@ -1,0 +1,4 @@
+:- op(200, xfy, elt).
+:- op(200, xfy, subset).
+definition(A subset B <=> ! [X]:(X elt A => X elt B)).
+theorem(thI03,![A,B,C]:(A subset B & B subset C => A subset C)).

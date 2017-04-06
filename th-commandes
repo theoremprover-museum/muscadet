@@ -1,0 +1,58 @@
+Pour demontrer un théorème
+
+1 - démonstration directe (sous Prolog)
+--------------------------------------
+Le script Unix musca-fr appelle Prolog et charge le fichier muscadet-fr
+appeler :
+	demontrer(<théorème à démontrer>).
+donner auparavant les définitions : 
+	assert(definition(<définition>)).
+si on le souhaite, pour les opérateurs infixes avant leur lecture :
+        op(<priorité>, <type>, <nom>).
+
+Exemple :
+	demontrer(p => p).
+Exemple1 :
+	assert(definition(inc(A,B) <=> ! [X]:(app(X,A) => app(X,B)))).
+        demontrer(![A,B,C]:(inc(A,B) & inc(B,C) => inc(A,C))).
+Exemple1bis :
+	op(200, xfy, app).
+	op(200, xfy, inc).
+	assert(definition(A inc B <=> ! [X]:(X app A => X app B))).
+	demontrer(![A,B,C]:(A inc B & B inc C => A inc C)).
+
+2 - A partir de fichiers contenant théorème et définitions
+----------------------------------------------------------
+              sous Linux                      sous Prolog 
+              ----------                      -----------
+           th <fichier> [<options>)       th(<fichier>[,<options>]).
+exemples : th exemples/exemple1           th('exemples/exemple1').
+           th fichier 50 +tr              th('exemples/exemple1',50,+trs).
+           th fichier -pr +szs            th('exemples/exemple1',-pr,+szs).
+
+les options possibles sont
+	un temps limite
+	+tr pour afficher la trace complète de la recherche
+	+pr               la preuve (uniquement les étapes utiles), (par défaut)
+	+szs              le resultat selon l'ontologie SZS
+	-tr -pr -szs pour ne pas afficher
+
+où <fichier> contient des données sous la forme
+	:- op(<priorité>,<type>, <nom>).        si nécessaire, avant sa lecture
+	definition(<énoncé>).
+        theoreme(<nom>,<énoncé>).
+        include(<fichier>) pour lire des données d'un autre fichier
+
+exemples/exemple1 :
+definition(inc(A,B) <=> ! [X]:(app(X,A) => app(X,B))).
+theoreme(thI03, ![A,B,C]:(inc(A,B) & inc(B,C) => inc(A,C))).
+
+exemples/exemple2 :
+include(exemples/exemple2_definitions).
+% transitivite de l inclusion
+theoreme(thI03,![A,B,C]:(inc(A,B) & inc(B,C) => inc(A,C))).
+% l'ensemble des parties d'une intersection est égale à l'intersection des parties
+theoreme(thI21,![A,B]:inc(parties(inter(A,B)),inter(parties(A),parties(B)))).
+
+D'autres exemples, en particulier du second ordre, se trouvent dans le 
+répertoire exemples, ainsi que des preuves.

@@ -1,0 +1,4 @@
+definition(inc(A,B) <=> ! [X]:(app(X,A) => app(X,B))).
+definition(egal_ens(A,B) <=> inc(A,B) & inc(B,A)).
+definition(app(X,parties(A))<=> inc(X,A)).
+definition(app(X,inter(A,B)) <=> app(X,A) & app(X,B)).

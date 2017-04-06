@@ -1,0 +1,2 @@
+definition(inc(A,B) <=> ! [X]:(app(X,A) => app(X,B))).
+theoreme(thI03, ![A,B,C]:(inc(A,B) & inc(B,C) => inc(A,C))).

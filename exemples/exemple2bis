@@ -1,0 +1,9 @@
+include('exemples/exemple2bis_definitions').
+:- op(200, xfy, app).
+:- op(200, xfy, inc).
+:- op(200, xfy, egal_ens).
+:- op(150,xfx,inter).
+% transitivite de l inclusion
+theoreme(thI03,![A,B,C]:(A inc B  &  B inc C  =>  A inc C)).
+% l'ensemble des parties d'une intersection est égale à l'intersection des parties
+theoreme(thI21,![A,B] : (parties(A inter B) egal_ens parties(A) inter  parties(B))).

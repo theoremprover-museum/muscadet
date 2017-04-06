@@ -1,0 +1,7 @@
+theorem(trans,![A]:transitive(subset, powerset(A))).
+definition(transitive(R,E) <=>
+            ![X,Y,Z]:(elt(X,E) & elt(Y,E) & elt(Z,E) =>
+                        (..[R,X,Y] & ..[R,Y,Z] => ..[R,X,Z]))).
+definition( subset(A,B) <=> ! [X] : ( elt(X,A) => elt(X,B) ) ) .
+definition(  elt(X,powerset(A)) <=> subset(X,A) ) .
+
