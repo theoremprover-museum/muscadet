@@ -2,12 +2,13 @@
 
 #include <string.h>
 #include <stdio.h>
-main(argc,argv)
+#include <stdlib.h>
+void main(argc,argv)
 int argc;
 char *argv[];
 
 { char cmd[256]; // pour construire la commande (chaine de caracteres)
-  strcpy(cmd,"swipl -f muscadet-fr -g true ");
+  strcpy(cmd,"/usr/bin/swipl -f muscadet-fr -g true ");
   if (argc >= 2 ) {
     strcat(cmd," <<! 2> /dev/null \n th(["); // th(
     int i;
@@ -18,13 +19,13 @@ char *argv[];
        strcat(cmd, ",");                       //                          ,
        strcat(cmd, argv[i]);                   //       autres arguments
        }
-    strcat(cmd, "]). \n halt. \n ! ");         //            ]).
+    strcat(cmd, "]). \n halt. \n ! .");         //            ]).
                                                //  alt.
                                                //       ! 
                                                //   .
     printf("\ncommande generee : \n%s\n",cmd);            
     }
-  else  strcpy(cmd, "th-commandes");
+  else  strcpy(cmd, "more th-commandes");
   system(cmd); // pour executer la commande             
   return;
 				      

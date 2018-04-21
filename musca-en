@@ -1,2 +1,2 @@
-swipl -f muscadet-en
+/usr/bin/swipl -f muscadet-en
 

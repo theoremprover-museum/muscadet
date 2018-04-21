@@ -2,12 +2,13 @@
 
 #include <string.h>
 #include <stdio.h>
-main(argc,argv)
+#include <stdlib.h>
+void main(argc,argv)
 int argc;
 char *argv[];
 
 { char cmd[256]; // to build the command (string)
-  strcpy(cmd,"swipl -f muscadet-en -g true ");
+  strcpy(cmd,"/usr/bin/swipl -f muscadet-en -g true ");
   if (argc >= 2 ) {
     strcat(cmd," <<! 2> /dev/null \n th(["); // th(
     int i;
@@ -18,7 +19,7 @@ char *argv[];
        strcat(cmd, ",");                       //                          ,
        strcat(cmd, argv[i]);                   //       other arguments
        }
-    strcat(cmd, "]). \n halt. \n ! ");         //            ]).
+    strcat(cmd, "]). \n halt. \n ! .");         //            ]).
                                                //  alt.
                                                //     !
                                                //   .
