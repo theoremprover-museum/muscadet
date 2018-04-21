@@ -9,7 +9,6 @@ char *argv[];
 
 { char cmd[256]; // to build the command (string)
                  // the executable is included in the number of arguments
- // strcpy(cmd,"/home/dominique/CASC/bin/swipl -f muscadet-en -g true ");
   strcpy(cmd,"/usr/bin/swipl -f muscadet-en -g true ");
   if (argc >= 2 ) {
     strcat(cmd," <<! 2> /dev/null \n tptp(["); // tptp([
