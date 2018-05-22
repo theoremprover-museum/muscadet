@@ -3,4 +3,4 @@ The Muscadet Theorem ProverThe Muscadet theorem prover is a knowledge-based syst
 and uses methods which resemble those used by humans. It is composed of an inference engine, which interprets and executes rules, 
 and of one or several bases of facts, which are the internal representations of “theorems to be proved”.
 Rules are either universal and put into the system, or built by the system itself by metarules from data (definitions and lemmas)
-given by the user. They are in the form if <list of conditions>, then <list of actions>. 
+given by the user.
