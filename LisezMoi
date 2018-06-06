@@ -1,0 +1,87 @@
+﻿
+Muscadet 4
+Dominique PASTRE 
+pastre(at)normalesup(dot)org(dot)org 
+
+Muscadet est distribué sous the new BSD licence
+Tous les fichiers se trouvent dans l'archive muscadet.tgz
+
+Le démonstrateur de théorèmes Muscadet est un système à base de connaissances.
+Il est basé sur la déduction naturelle et utilise des méthodes proches de celles 
+de l’être humain.
+Il comprend un moteur d'inférences qui interprète et exécute des règles
+et une ou plusieurs bases de faits qui sont les représentations internes de
+"théorèmes à démontrer". 
+Les règles sont soit universelles et incorporées au système, soit construites
+par le système lui-même grâce à des métarègles, à partir de données
+(définitions et lemmes) fournies par l'utilisateur. 
+
+mode d'emploi (aussi dans muscadet.html) 
+-------------
+
+manuel-fr.pdf est le manuel de l'utilisateur 
+
+muscadet-fr est le fichier Prolog complet 
+musca-fr est un script Unix qui permet de lancer le programme.
+Il faut ensuite utiliser une des commandes demontrer, tptp ou th
+th-fr.c et tptp-fr.c sont des petits fichiers C qui permettent de travailler
+sous Linux 
+exemples est un répertoire d'exemples (données exemple* et preuves res_*) 
+
+Le Prolog utilisé est SWI-Prolog, logiciel gratuit sous licence L-GPL,
+téléchargeable à l'adresse suivante http://www.swi-prolog.org/Download.html 
+et que l'on appelle par la commande /usr/bin/swipl
+
+Dans tous les cas, se placer dans un répertoire contenant le fichier Prolog
+muscadet-fr (ou un lien de même nom vers ce fichier). Puis 
+
+1. Démonstration directe d'un théorème T (sous Prolog)
+----------------------------------------
+Appeler le script Unix musca-fr .
+On est alors sous SWI-Prolog et le fichier muscadet-fr est chargé. 
+taper demontrer(T). 
+auparavant, si nécessaire, 
+assert(definition(D)). et/ou assert(lemme(Nom,L)).
+puis consreg. 
+
+2. Démonstrations à partir de fichiers contenant théorèmes, définitions, lemmes
+-------------------------------------------------------------------------------
+sous la forme
+theoreme(Nom,T).
+definition(D).
+lemme(Nom,L). 
+
+2.1. Sous Prolog (appelé par musca-fr qui a chargé muscadet-fr),
+----------------
+appeler th(Fichier [,Options]).
+ou th. pour un mode d'emploi détaillé 
+
+2.2. Sous Linux
+---------------
+compiler le fichier th-fr.c, executable th
+appeler th fichier [options]
+ou th pour un mode d'emploi détaillé 
+
+3. Démonstration d'un théorême de la bibliothèque TPTP 
+------------------------------------------------------
+                  ( http://www.cs.miami.edu/~tptp ) 
+
+3.1. Sous Prolog (appelé par musca-fr qui a chargé muscadet-fr),
+----------------
+appeler tptp(Fichier [,Options]). 
+ou tptp(Nom [,Options]). 
+ou tptp. pour un mode d'emploi détaillé 
+
+3.2. Sous Linux
+---------------
+compiler le fichier tptp-fr.c, executable tptp
+appeler tptp chemin [options]
+ou tptp pour un mode d'emploi détaillé 
+
+4. Résultats
+------------
+dans le cas direct (1.), sur la sortie standard 
+sinon (2. et 3.) dans des fichiers appelés 
+res_<nom du théorème ou du problème TPTP> 
+
+

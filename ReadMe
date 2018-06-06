@@ -1,0 +1,80 @@
+﻿
+Muscadet 4
+Dominique PASTRE 
+pastre(at)normalesup(dot)org(dot)org 
+
+Muscadet is available under the new BSD licence
+All files are in the archive muscadet.tgz
+
+The Muscadet theorem prover is a knowledge-based system.
+It is based on natural deduction, and uses methods which resemble those used
+by humans.
+It is composed of an inference engine, which interprets and executes rules,
+and of one or several bases of facts, which are the internal representations
+of “theorems to be proved”.
+Rules are either universal and put into the system, or built by the system
+itself by metarules from data (definitions and lemma s) given by the user.
+
+
+directions for use (also in muscadet.html) 
+------------------
+manual-en.pdf is the user's manual 
+muscadet-en is the complete Prolog file 
+musca-en is a Unix script, which allows to start it;i
+ you must then call one of the commands prove, tptp , casc or th 
+th-en.c and tptp-en.c are small C files which allow to work under Linux 
+examples is a directory of examples (data example* and proofs res_*) 
+
+The Prolog used is SWI-Prolog, which is freeware under an L-GPL license,
+downloaded at the following address http://www.swi-prolog.org/Download.html 
+and which is called by the command /usr/bin/swipl
+
+In all cases, you have to be in a directory that contains the Prolog file
+muscadet-en (or a link with the same name to this file).
+Then 
+
+1. Direct proof of a theorem T (under Prolog) 
+-----------------------------
+Call the Unix script musca-en .
+You are then under SWI-Prolog and the file muscadet-en is loaded. 
+type prove(T). 
+before, if necessary, 
+assert(definition(D)). and/or assert(lemma(Nom,L)).
+then buildrules. 
+
+2. Proofs from files containing theorems, definitions and lemmas in the form
+----------------------------------------------------------------
+theorem(Nom,T).
+definition(D).
+lemma(Name,L). 
+
+2.1. Under Prolog (called by musca-en which loads muscadet-en), 
+     ------------
+call th(File [,Options]). or th. for detailed instructions 
+
+2.2. Under Linux
+----------------
+compile the file th-en.c, executable th
+call th file [options] or th for detailed instructions 
+
+3. Proof of one theorem of the TPTP library ( http://www.cs.miami.edu/~tptp ) 
+-------------------------------------------
+
+3.1. Under Prolog (called by musca-en which loads muscadet-en),
+-----------------
+call tptp(File [,Options]). 
+or tptp(Name[,Options]). 
+or tptp. for detailed instructions 
+
+3.2. Under Linux
+----------------
+compile the file tptp-en.c, executable tptp
+call tptp path [options]
+ou tptp for detailed instructions 
+
+4. Results
+----------
+in the direct case (1.), on the standard output
+otherwise (2. et 3.) in files named 
+rul_<name of the theorem or of the TPTP problem TPTP> 
+
