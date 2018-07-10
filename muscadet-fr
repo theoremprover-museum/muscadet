@@ -1,8 +1,8 @@
 %% Copyright 2008 Crip5 Dominique Pastre
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%   Muscadet version 4.7.3   %%
-%%      06/06/2018            %%
+%%   Muscadet version 4.7.4   %%
+%%      09/07/2018            %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -29,7 +29,7 @@
 :-dynamic sousth/2. 
 %% objet(N,O) : O is an object of (sub-)th N
 :-dynamic objet/2.
-%% reglactiv(N,LNR): LNR est la liste des noms des règles actives du (sous-)th N
+%% reglactiv(N,LR): LR est la liste des noms des règles actives du (sous-)th N
 :-dynamic reglactiv/2. 
 :-dynamic regle/2. 
 :-dynamic concept/1.
@@ -157,7 +157,7 @@ regle(Nom) :- clause(regle(_,Nom ),Q), ecrire1(Q).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%
-%%    moteur          %%
+%% moteur d'inférence %%
 %%%%%%%%%%%%%%%%%%%%%%%%
 
 %%   ++++++++++++++++++++ appliregactiv(N) +++++++++++++++++
@@ -1222,12 +1222,17 @@ ajoucond(N,C,An,A,CA,AnA) :-
 
 %% ++++++++ ajoureg(N, Arg, Nom, Corps) +++ appelée par consreg(...) ++++++++ 
 
-%% après en avoir supprimé/remplacé les égalités (dans les conditions),
-%% mémorise la règle Corps construite par consreg, avec son nom,
-%% au moyen du prédicat regle
-%% ou, pour les règles construites à partir d'hypothèses universelles H
-%% (si Arg = N+H) au moyen du prédicat reglehypuniv et avec le numéro d'etape
-%% et appelle ajoureglocale qui l'ajoute à la liste des règles actives
+%% mémorise la règle construite par consreg
+%% Corps est l'énoncé, construit par consreg, de la regle de nom Nom
+%% les conditions égalitaires en sont supprimées/remplacées (Corps0)
+%% Arg est un concept, un marqueur ou de la forme N+H si la regle
+%%    a été construite à partir de l'hypothèse universelle H 
+%% la règle est alors mémorisée sous forme de la clause, executable,
+%%       regle(N,Nom) :- Corps0.
+%% pour les règles construites à partir d'hypothèses universelles
+%%    ceci est fait par un appel à ajoureglocale qui ajoutera aussi
+%%    le nom de a règle dans la liste des réègles actives
+
 ajoureg(N, Arg, Nom, Corps) :- 
        sup_cond_egal(Corps, Corps0),
        (ecrireconsreg -> nl,ecrire1('ajoureg apres sup_cond_egal'-Corps0);true),
@@ -1258,21 +1263,23 @@ sup_egal(X,(Y,L),(Y,L1)) :- sup_egal(X,L,L1),!.
 sup_egal(X=Y,X=Y,[]) :-  ! . 
 
 
-%% +++++ ajoureglocale(N,R, Nom) +++ appelée par ajoureg et traitegal +++++ 
-%% ajoute la règle R dans la liste des règles actives du (sous-)th N,
+%% +++ ajoureglocale(Nth,ClauseR, Nom) +++ appelée par ajoureg et traitegal +++
+%% mémorise la règle ClauseR= (regle(_,Nom):- _) et
+%% ajoute son Nom dans la liste des règles actives du (sous-)th Nth,
 %% à la fin des règles générales (regles_gen), avant les autres règles
-ajoureglocale(N,R, Nom) :- 
-         reglactiv(N,LR), R= (regle(_,Nom):- _), etape(E),
-         acrire1(tr,[E:N, 'ajouter la regle active locale']),
-         ecrire_simpl_R(tr,R), %% affichage simplifié de la règle
+ajoureglocale(Nth,ClauseR, Nom) :- 
+         reglactiv(Nth,LR), ClauseR= (regle(_,Nom):- _), etape(E),
+         assert(ClauseR),
+         acrire1(tr,[E:Nth, 'ajouter la regle active locale']),
+         ecrire_simpl_R(tr,ClauseR), %% affichage simplifié de la règle
          acrire1(tr,'a la fin des regles générales'),
          ligne(tr),
-         assert(type(Nom,N)),
+         assert(type(Nom,Nth)),
          regles_gen(LRG),append(LRG,LRNG,LR),
        NLRNG=[Nom|LRNG] ,
        append(LRG,NLRNG,NLR),
-       retract(reglactiv(N,LR)), assert(reglactiv(N,NLR)),
-       assert(R),!.
+       retract(reglactiv(Nth,LR)), assert(reglactiv(Nth,NLR)),
+       !.
 
 %% supprime la regle de nom Nom de la liste de règles LR
 desactiver(N,Nom) :- reglactiv(N,LR),member(Nom,LR),oter(Nom,LR,LR1),

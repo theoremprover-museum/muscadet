@@ -1,8 +1,8 @@
 %% Copyright 2008 Crip5 Dominique Pastre
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%   Muscadet version 4.7.3   %%
-%%      06/06/2018            %%
+%%   Muscadet version 4.7.4   %%
+%%      07/09/2018            %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -29,7 +29,7 @@
 :-dynamic subth/2.
 %% objet(N,O) : O est un objet du (sous-)th N
 :-dynamic objet/2.
-%% rulactiv(N,LNR) : LNR is the list of the names of the active rules for the (sub-)th N 
+%% rulactiv(N,LNR) : LR is the list of the names of the active rules for the (sub-)th N 
 :-dynamic rulactiv/2.
 :-dynamic rule/2.
 :-dynamic concept/1.
@@ -159,7 +159,7 @@ rule(Nom) :- clause(rule(_,Nom ),Q), ecrire1(Q).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%
-%% inference engine   %%  
+%%  inference engine  %%  
 %%%%%%%%%%%%%%%%%%%%%%%%
 
 %%   ++++++++++++++++++++ applyrulactiv(N) +++++++++++++++++
@@ -1233,12 +1233,16 @@ ajoucond(N,C,An,A,CA,AnA) :-
 
 %% ++++++++ ajoureg(N, Arg, Nom, Corps) +++ called by buildrules(...) ++++++++ 
 
-%% after having removed/replaced the equalities (in conditions)
-%% memorizes the rule Corps built by buildrules, with its name,
-%% by means of the rule predicate
-%% or, for rules built from universal hypotheses (if Arg = N+H)
-%% by means of the reglehypuniv predicate and with its step number
-%% and calls ajoureglocale which adds it in the list of active rules
+
+%% memorizes the rule built by buildrules
+%% Corps is the statement, built by buildrules, of the rule named Nom
+%% equalitary conditions are removed/replaced from it (new statement Corps0)
+%% Arg is a concept, a flag or in the form N+H if the rule
+%%    has been built from the universal hypothesis H
+%% then the rule is memorized as the clause, executable
+%%       rule(N,Nom) :- Corps0.
+%% for rules built from universal hypotheses, this is done by ajoureglocale
+%%    which will also add the rule name in the active rules list
 ajoureg(N, Arg, Nom, Corps) :- 
        sup_cond_equal(Corps, Corps0),
        (writebuildrules -> nl,ecrire1('ajoureg apres sup_cond_equal'-Corps0);true),
@@ -1269,22 +1273,24 @@ sup_equal(X,(Y,L),(Y,L1)) :- sup_equal(X,L,L1),!.
 sup_equal(X=Y,X=Y,[]) :-  ! . 
 
 
-%% +++++ ajoureglocale(N,R, Nom) +++ called by ajoureg and traitequal +++++ 
-%% adds the rule R in the list of active rules of (sub-)th N,
+%% ++++ ajoureglocale(Nth,ClauseR, Nom) +++ called by ajoureg and traitequal +++ 
+%% memorizes the rule ClauseR= (rule(_,Nom):- _) and
+%% adds its name Nom in the list of active rules of (sub-)th Nth,
 %% at the end of general rules (regles_gen), before other rules
-ajoureglocale(N,R, Nom) :- 
-         rulactiv(N,LR), R= (rule(_,Nom):- _), step(E),
-         acrire1(tr,[E:N, 'add the local rule']),
-         ecrire_simpl_R(tr,R), 
+ajoureglocale(Nth,ClauseR, Nom) :- 
+         rulactiv(Nth,LR), ClauseR= (rule(_,Nom):- _), step(E),
+         assert(ClauseR),
+         acrire1(tr,[E:Nth, 'add the local rule']),
+         ecrire_simpl_R(tr,ClauseR), 
                                %% simplified display of the rule
          acrire1(tr,'at the end of general rules'),
          ligne(tr),
-         assert(type(Nom,N)),
+         assert(type(Nom,Nth)),
          regles_gen(LRG),append(LRG,LRNG,LR),
        NLRNG=[Nom|LRNG] ,
        append(LRG,NLRNG,NLR),
-       retract(rulactiv(N,LR)), assert(rulactiv(N,NLR)),
-       assert(R),!.
+       retract(rulactiv(Nth,LR)), assert(rulactiv(Nth,NLR)),
+       !.
 
 %% removes the rule named Nom from the list of rules LR
 desactiver(N,Nom) :- rulactiv(N,LR),member(Nom,LR),oter(Nom,LR,LR1),
