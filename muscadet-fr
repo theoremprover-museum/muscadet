@@ -1,8 +1,8 @@
 %% Copyright 2008 Crip5 Dominique Pastre
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%   Muscadet version 4.7.4   %%
-%%      09/07/2018            %%
+%%   Muscadet version 4.7.6   %%   
+%%      03/12/2018            %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -69,8 +69,8 @@
 :- dynamic include/1.
 
 
-nbhypexi(0).  %% pour compter les hypothèses existentielles
-lengthmaxpr(12000). %% limite pour la longueur des preuves affichées
+nbhypexi(0).  %% pour compter les hypothèses existentielles 
+lengthmaxpr(12000). %% limite pour la longueur des preuves affichées 
 
 %% priorites(sans).   
 priorites(avec). 
@@ -168,11 +168,11 @@ regle(Nom) :- clause(regle(_,Nom ),Q), ecrire1(Q).
 
 
 appliregactiv(N) :- 
-                repeat,
-              ( concl(N, true, _) -> demontre(N) 
-              ; concl(N, _/timeout, _) -> message(aaaaaaaaaaaaaaa),!, nondemontre(N)
-              ; reglactiv(N,LR) ->  ( applireg(N,LR)-> fail ;! )  
-              ) .           
+        repeat,
+        ( concl(N, true, _) -> demontre(N) 
+        ; concl(N, _/timeout, _) -> message(aaaaaaaaaaaaaaa),!, nondemontre(N)
+        ; reglactiv(N,LR) ->  ( applireg(N,LR)-> fail ;! )  
+        ) .           
 %% +++
 
 %%   ++++++++++++++++++++ applireg(N,LR_) +++++++++++++++++++
@@ -207,12 +207,12 @@ tempsdepasse(N,Marqueur) :-
        AG  =('secondes (timeout)\n'),
    MESSAGE = [ME,N,ES,Marqueur,SS,SA,T,AG],
    message(MESSAGE),nl,
-             (N = -1 -> probleme(P),atom_concat(res_,P,RES),tell(RES)
-             ; true),
-             acrire1(tr,MESSAGE),nl,
-             ! , 
-            nondemontre(0),
-            break 
+   (N = -1 -> probleme(P),atom_concat(res_,P,RES),tell(RES)
+   ; true),
+   acrire1(tr,MESSAGE),nl,
+   ! , 
+   nondemontre(0),
+   break 
                     .
 
 %%   ++++++++++++++++++++ demontre(N) ++++++++++++++++++++++
@@ -222,6 +222,7 @@ tempsdepasse(N,Marqueur) :-
 %% et l'option (tptp, th, direct, szs, casc,...)
 %% si N=0, affiche (selon version) le temps passe 
 %% et eventuellement extrait la preuve utile et le temps de cette extraction
+
 demontre(N) :- 
    ( N=0 -> ( version(tptp),conjecture(false,_) -> 
            message('pas de conjecture, probleme montre insatisfaisable')
@@ -276,10 +277,11 @@ demontre(N) :-
    ) .
 %% +++
 
-%% +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+%%   ++++++++++++++++++++ demontre(N) ++++++++++++++++++++++
+%%
 %% nondemontre(N) affiche l'echec pour le (sous-)theoreme de numero N
 %% si N=0 affiche le temps passe (selon options)
+
 nondemontre(N) :- 
   ( N=0 -> ecrire1etmessage('theoreme non demontre '),
            probleme(P),
@@ -317,26 +319,27 @@ nondemontre(N) :-
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
 varatom(X) :- %% X est une variable ou un atome
-             %% Attention [] est une atome ou non selon les versions de Prolog
+   %% Attention [] est une atome ou non selon les versions de Prolog
    (var(X);atom(X)).
-  %(var(X);atom(X);X=[]).
 
 vars([X|L]) :- %% L est une liste (eventuellement vide) de variables
     var(X), vars(L).
 vars([]).
 
+%% cherche si X peut s'unifier avec un (sous-)élément de E
 element(X,E) :- %% X apparait dans E , a n'importe que niveau :
                 %%    X est unifiable avec E ou une de ses sous-formules 
                 %%    ou avec une (sous-)formule d'une liste de formules
                 %%   utilise par lire, avecseuile et ecrireV (X constante)
-                (X=E -> true  %% toujours si X est une simple variable
-                ; E=[] -> fail
-                ; E=[A|_], X == A -> true
-                ; E=[A|_],\+ atom(A),\+ var(A),\+ number(A),element(X,A)
-                      -> true
-                ; E=[_|L] -> element(X,L)
-                ; E=..L -> element(X,L)
-                ).
+      (X=E -> true  %% toujours si X est une simple variable 
+      ; E=[] -> fail
+      ; E=[A|_], X == A -> true
+      ; E=[A|_],\+ atom(A),\+ var(A),\+ number(A),element(X,A)
+            -> true
+      ; E=[_|L] -> element(X,L)
+      ; E=..L -> element(X,L)
+      ).
+
 %% Pour balayer tous les elements d'une liste, au premier niveau,
 %% the predicat predefini member(X,L) est utilisé
 
@@ -359,8 +362,10 @@ denumlast(Atom,Atom1) :- atom(Atom), name(Atom,L),last(L,D),
                          append(L,[95],L1),name(Atom1,L1).
 denumlast(Atom,Atom).
 
+
 %% visualise, avec indentation des formules dis/conjonctives horribles
 %%    n'est plus utilise, mais pourrait ête utile
+
 arbre(E) :- arbre(E,0).
 arbre(E,Indent) :- E=..[Op,A,B],(Op='|';Op='&'),nl,indent(Indent),
                    write(Op),I is Indent+1,arbre(A,I),arbre(B,I),!.
@@ -368,9 +373,12 @@ arbre([],_) .
 arbre(E,Indent) :- nl,indent(Indent),write(E).
 indent(N) :- write('   '),(N>0 -> N1 is N-1, indent(N1);true).
 
+
+%% crée un nouvel atome X1 à partir de X
 %% si l'atome X ne se termine pas par un nombre, ajoute 1
 %% sinon ajoute 1 au nombre terminal
 %%    (remplace par gensym sauf dans "creer_nom_regle")
+
 suc(X,X1) :- name(X,L),sucliste(L,L1),name(X1,L1).
 sucliste(X,X1):-
    last(X,D),
@@ -382,21 +390,27 @@ sucliste(X,X1) :- last(X,57),append(Y,[57],X),sucliste(Y,Y1),
       append(Y1,[48],X1),!.
 sucliste(X,X1):- append(X,[49],X1).
 
+
 %% ajoufin(L,A,L1) ajoute A a la fin de la liste L
+
 ajoufin([X|L],A,[X|L1]) :- ajoufin(L,A,L1).
 ajoufin([],A,[A]).
 
+
 %% ajoute A à la fin de la sequence S
+
 ajoufinseq(S,A,SA) :- ( S = (X,L) ->  ajoufinseq(L,A,L1), SA = (X,L1)
                       ; S = [] -> SA = A
                       ; SA = (S,A)
                       ).
+
 
 %% ajoute une condition A, dans une sequence S avant les conditions obj_ct
 %% cad : à la fin si c'est une condition obj_ct 
 %%                ou s'il n'y a pas encore de conditions obj_ct,
 %%       sinon avant les conditions obj-ct
 %% SA est la nouvelle sequence
+
 ajouseqavantobjet(S,A,SA) :- 
        ( A = obj_ct(_,_) -> ajoufinseq(S,A,SA) 
        ; S=(obj_ct(_,_),_L) -> SA = (A,S) 
@@ -406,33 +420,44 @@ ajouseqavantobjet(S,A,SA) :-
        ; SA = (S,A)                     
        ) 
        .
+
+
 %% renvoie les objets X en commençant par ceux du sous-theoreme N instancie 
 %%         puis les objets apparaissant dans les données (N=-1)
+
 obj_ct(N,X) :- 
      objet(N,X) ; objet(-1,X).
 
 
-%% ajoute une clause P(...) d'arité 0, 1, 2 ou 3 (à généraliser si nécessaire)
+%% ajoute une clause P(...) d'arité 0, 1, 2 ou 3 
+%%              (à généraliser si nécessaire)
 %%        après avoir éventuellement supprimé toute autre clause P(...)
+
 affecter(X) :- 
                X =.. [P,_],Y=..[P,_],retractall(Y),assert(X),!.
 affecter(X) :- X =.. [P,_,_],Y=..[P,_,_],retractall(Y),assert(X),!.
 affecter(X) :- X =.. [P,A,_,_],Y=..[P,A,_,_],retractall(Y),assert(X),!.
 
+
 %% incremente le nombre d'hypothèses existentielles (nbhypexi)
+
 incrementer_nbhypexi(N1) :- nbhypexi(N), N1 is N+1, affecter(nbhypexi(N1)).
+
 
 %% renvoie E1 si E1 est un atome (numéro d'etape),
 %% sinon crée une nouvelle etape E1 
+
 etape_action(E1) :- 
-                    ( var(E1),etape(E0) -> E1 is E0+1,affecter(etape(E1))
-                    ; true).
+          ( var(E1),etape(E0) -> E1 is E0+1,affecter(etape(E1))
+          ; true).
+
 
 %% met une formule à plat 
 %% exemple : f(g(a, b), h(c), K) devient f_g_a_b_h_c_var
 %% n'est plus utilise (illisible car trop long pour certaines formules)
 %% à la place on crée des objets z1, z2, ... (règle concl_seul)
-%% pourrait ête utilisé pour de petites formulesa
+%% pourrait ête utilisé pour de petites formules
+
 plat(E,E1) :- ( (atom(E) ; number(E) ) -> E1 = E
               ; var(E) -> E1=var
               ; E = [X,Y|L] ->  plat(X,X1),plat([Y|L],L1),
@@ -445,6 +470,7 @@ tartip(X1,X2) :- name(X1,L1),compareg1ter(L1,L2),name(X2,L2).
 
 %% cherche si E est une formule, éventuellement quantifiée, est close
 %% sinon, on utilise ground, clos n'est utilisé que dans consreg
+
 clos(E) :- not(var(E)),
            ( E=[] -> true
            ; E=[X|L] -> clos(X),clos(L)
@@ -463,12 +489,14 @@ clos(E) :- not(var(E)),
            ; acrire1(tr,clos-E-non)
            ).
 
+
 %% Depuis la version 5 de swi-prolog, telling ne renvoie plus  
 %% le nom du fichier de la sortie courante mais un "stream identifier"  
 %% de la forme <stream>(0x81ea8c8) que je ne sais pas récuperer, 
 %% J'ai donc défini un prédicat dynamique fichier et des prédicats telll, 
 %% toldd, tellling et appendd, pour remplacer (mais non identiques)
 %% tell, told, telling et append
+
 :- dynamic fichier/1. 
 telll(F) :- tell(F), retractall(fichier(_)), assert(fichier(F)).
 toldd :-  retractall(fichier(_)),told.
@@ -481,11 +509,13 @@ appendd(F) :- append(F), retractall(fichier(_)), assert(fichier(F)).
 %%          super-actions            %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%% ++++++++++++++++++++++++   travail1   ++++++++++++++++++++++++
 %% construit les règles à partir des définitions, 
 %% après en avoir éliminé les symboles fonctionnels 
 %% si on a demandé l'affichage détaillé de la construction (ecrireconsreg), 
 %% la trace est dans le fichier traceconsreg[_<nom du problème>]
 %% ou dans res[_<nom du problème>] pour les règles locales_
+
 travail1 :-  (probleme(P) -> atom_concat(traceconsreg_,P,Traceconsreg)
              ; Traceconsreg=traceconsreg
              ),  
@@ -495,8 +525,11 @@ travail1 :-  (probleme(P) -> atom_concat(traceconsreg_,P,Traceconsreg)
               consreg, 
               typesdonnees, 
               told.
+
+
 %% +++++++++++++++++++++++ ecrireconsreg ++++++++++++++++++
 %% active l'option d'affichagedétaillé de la constructin des règles
+
 ecrireconsreg :- 
                  afficher(reg).
 
@@ -504,11 +537,14 @@ typesdonnees :- clause(regle(_,Nom),_), \+ type(Nom,_),
                 assert(type(Nom,donnee)),fail.
 typesdonnees.
 
+
 %% +++++++++++++++++++++ demontr(Theoreme) +++++++++++++++++++
 %% coeur du démonstrateur : initialisations, affichages, 
 %%                          activation et applications des règles
+
 demontr(_Theoreme) :- %% arrêt si temps limite dépassé 
      tempsdepasse(0, ['temps depasse avant meme d\'attaquer le theoreme']).
+
 demontr(Theoreme) :- 
      ( version(casc) -> true 
      ; ecrire1('****************************************'),
@@ -519,7 +555,7 @@ demontr(Theoreme) :-
      %% nl, write(Theoreme) %% si on veut l'affichage complet 
      ),
      preambule,
-     affecter(etape(0)),        %% 1ère etape 
+     affecter(etape(0)), %% 1ère etape 
      nouvconcl(0, Theoreme, E), %% E=1
      %% première ligne de la trace utile
      traces(0, action(ini), %% nom de l'action 
@@ -563,7 +599,8 @@ demconj(N,C,Econj, Efin) :-
  (B=true -> Cond=[],
             Expli=('demonstration du dernier element de la conjonction')
  ; Cond=concl(N, C, Econj),
-   Expli=('pour demontrer une conjonction, on demontre successivement tous les elements de la conjonction')
+   Expli=['pour demontrer une conjonction',
+          'on demontre successivement tous les elements de la conjonction']
  ),
  traces(N1, %% numero du sous-théorème 
         action(demconj), %% nom de l' action 
@@ -732,42 +769,42 @@ ajhyp(N, H, E2) :-
  (  H = (A & B) ->
     %% appel recursif pour une conjonction
     ajhyp(N, A, E2), ajhyp(N,B, E2)
-
-  ; %% H est déjà une hypothèse
+  ;
+    %% H est déjà une hypothèse
     hyp(N, H,_) -> acrire1(tr,[E2:N,H]),
                    acrire1(tr,'est déjà une hypothèse'),
                    true 
-
-  ; %% H est une disjonction contenant une hypothese
+  ;
+    %% H est une disjonction contenant une hypothese
     hyp_true(N,H,T) -> assert(hyp(N, H,E2)), acrire1(tr,[E2:N,ajhyp(H)]),
-                       acrire1(tr,['sans effet car on a deja hyp(',T,')']),
-                       ajhyp_traite(N,H)
-
-  ; %% H est une égalité triviale
+                      acrire1(tr,['sans effet car on a deja hyp(',T,')']),
+                      ajhyp_traite(N,H)
+  ;
+    %% H est une égalité triviale
     H = (X = X) -> acrire1(tr,[E2:N,ajhyp(H)]),
                    acrire(tr,'qui est une egalite triviale')
-
-  ; H =(X,A) ->
+  ;
+    H =(X,A) ->
     %% ce type de formule apparait dans le traitement des définitions
     %% de la forme h(X)=f(g(X)) (voir consreg(, elifon and elifondef &&&&&&&& 
     etape(I), I1 is I+1, affecter(etape(I1)),
     assert(hyp(N,H,I1)), 
     creer_objet(N,z,X1), remplacer(A,X,X1,A1), 
     ajhyp(N,A1,I1)
-
-  ; %% les égalités sont normalisées : le 1er terme est le plus petit,
+  ;
+    %% les égalités sont normalisées : le 1er terme est le plus petit,
     %% lexicographiquement, sauf pour les objets crees z<nombre> où
     %% c'est l'ordre de création (numérique)
     H = (Y=X), atom(X), atom(Y), avant(X,Y), ajhyp(N,(X=Y),E2)
-
-  ; %% (pour le pseudo-second ordre) si H est ..[r,X,Y], on ajoute r(X,Y)
+  ;
+    %% (pour le pseudo-second ordre) si H est ..[r,X,Y], on ajoute r(X,Y)
     H = (..[R, X, Y])  -> (H1 =..[R, X, Y]), ajhyp(N, H1, E2)
-
-  ; H = (..[F, X]::Y)  -> 
+  ;
+    H = (..[F, X]::Y)  -> 
     %% (pour le pseudo-second ordre) si H est ..[f,x]::y, on ajoute f(x):y
     (Y1 =..[F, X]), ajhyp(N, Y1:Y, E2),ajhyp(N, Y1::Y, E2)
- 
-  ; H=seul(A::X,Y)->
+  ;
+    H=seul(A::X,Y)->
     %% (pseudo-second ordre) si H est seul(f(x)::A,p(x,A)) [issu de p(x,f(x))]
     %% ajoute l'hypothèse p(x1) où x1 est un objet 
     %%       soit déjà introduit (hypothèse f(x)::x1)
@@ -776,8 +813,8 @@ ajhyp(N, H, E2) :-
     ; creer_objet(N,z,X1),ajhyp(N,A::X1, E2)
     ),
     remplacer(Y,X,X1,Y1),ajhyp(N,Y1,E2)
-
-  ; H = (~ seul(FX::Y,P)) ->
+  ;
+    H = (~ seul(FX::Y,P)) ->
     %% si x a été instancié, p(f(x) peut être remplacé par ?x:(f(x)::y & p(y)
     %%   ou !x:(f(x)::y => p(y)), le bon choix dépend de la parité de
     %%   sa profondeur dans la formule, la négation change cette parité, 
@@ -788,15 +825,15 @@ ajhyp(N, H, E2) :-
     %%  ?y (f(x)::y & ~ p(y)) soit seul(f(x)::y,p(y)  
     ajhyp(N,seul(FX::Y, ~ P ), E2)
           
-
-  ; H = (!_: _) -> %% ++++++++++++++++++++++++++++++++++++++++++++++++++ 
+  ;
+    H = (!_: _) -> %% ++++++++++++++++++++++++++++++++++++++++++++++++++ 
     %% création de règles locales de nom r_hyp_univ_<etape> à partir
     %%       des hypothèses universelles et des implications 
    ecrire1(ajhypE2=E2),
     atom_concat(r_hyp_univ_,E2,ReghypE2), 
     atom_concat(ReghypE2,'_',Reghyp),
     acrire1(tr,[E2:N,'traiter l\'hypothèse universelle (non ajoutée)',
-                      H]),
+                     H]),
     creer_nom_regle(Reghyp,Nom), %% Nom=r_hyp_<etape>_ 
     %% appel de consreg pour l'énoncé H (1er argument)
     %% l'expression N+H comme 4ème argument jouant le rôle de Concept
@@ -843,10 +880,10 @@ ajobjet(N, X) :-
 ajconcept(P) :- (concept(P) -> true; assert(concept(P))).
 ajfonction(F,N) :- (fonction(F,N)-> true;assert(fonction(F,N))).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%    c o n s t r u c t i o n   d e s   r è g l e s    %%
-%%  consreg/0et7   ajoucond   ajoureg   ajoureglocale  %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%    c o n s t r u c t i o n   d e s   r è g l e s     %%
+%%  consreg/0et7   ajoucond   ajoureg   ajoureglocale   %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% consreg/7 construit des règles à partir d'un énoncé
 %% consreg/0 construit les énoncés à envoyer à consreg/7
@@ -863,8 +900,6 @@ consreg :-
 %% 2 nouvelles définitions sont ajoutées : nonA définie par B
 %%                                    et   A définie par la négation de B
 %% (voir manuel-fr.pdf § 6. Définitions et lemmes
-%%                         and   A defined by the negation of B
-%% (seer manual-en.pdf § 6. Definitions and lemmas
 consreg :- definition(Nomfof,A<=> ~ B),
     A=..[P|L], vars(L),
     ajconcept(P),  
@@ -888,27 +923,25 @@ consreg :- definition(Nomfof,A<=> ~ B),
 
 %% définitions de symboles fonctionnels (voir manuel-fr.pdf)
 consreg :- definition(Nomfof, A<=>B), 
-        not(var(A)),
-       (ecrireconsreg-> ecrire1('\nconsreg'-definition(Nomfof,A<=>B));true), 
-        ( A=(C::_) -> C =..[P|_]   
-        ; A=..[_,_,E],not(var(E)),E=..[_|_] -> fail 
-        ; A=..[P|_]             
-        ),
-        (ecrireconsreg-> ecrire1(definitionapres(A<=>B)+'P'=P);true), 
-        ajconcept(P), 
-        
-       denumlast(P,P1), 
-        creer_nom_regle(P1,Nom),
-        
-        (A=(X=Y)-> remplacer(B,Y,X,B1),consreg(B1,N,Nomfof,P,Nom,objet(N,X),[])
+      not(var(A)),
+      (ecrireconsreg-> ecrire1('\nconsreg'-definition(Nomfof,A<=>B));true), 
+      ( A=(C::_) -> C =..[P|_]   
+      ; A=..[_,_,E],not(var(E)),E=..[_|_] -> fail 
+      ; A=..[P|_]             
+      ),
+      (ecrireconsreg-> ecrire1(definitionapres(A<=>B)+'P'=P);true), 
+      ajconcept(P), 
+      denumlast(P,P1), 
+      creer_nom_regle(P1,Nom),
+      (A=(X=Y)-> remplacer(B,Y,X,B1),consreg(B1,N,Nomfof,P,Nom,objet(N,X),[])
       
-        ; consreg(A=>B,_,Nomfof,P,Nom,[],[]), 
-          (B = (_ | _) -> (ecrireconsreg -> 
-                           ecrire1('consreg def contraposee de ':(A=>B))
-                          ;true),
-               consreg(B=>A,_,Nomfof,P,Nom,[],[]);true) 
-        ),
-        fail.
+      ; consreg(A=>B,_,Nomfof,P,Nom,[],[]), 
+      (B = (_ | _) -> (ecrireconsreg -> 
+                       ecrire1('consreg def contraposee de ':(A=>B))
+                      ;true),
+      consreg(B=>A,_,Nomfof,P,Nom,[],[]);true) 
+      ),
+      fail.
      
 
 
@@ -921,27 +954,27 @@ consreg :- definition(Nomfof,A=B), not(B=[_,_]),
 
 %% définitions ensemblistes (uniquement version th)
 consreg :- definition(Nomfof,A<=>D),        
-        (ecrireconsreg -> ecrire1(\nconsreg-def-elt-definition(Nomfof,(A<=D)))
-        ;true),
-        ( A =..[R,X,E],not(var(E)),E=..[F|_] 
-        ) ,
-        ajconcept(F), 
-    denumlast(F,F1), 
-        creer_nom_regle(F1,Nom),
-        ( atom(E) -> 
-       (ecrireconsreg -> ecrire1(consreg-def-elt-apres1:(![X]:(A =>D)));true),
-             consreg((![X]:(A =>D)),_,Nomfof,F,Nom,[],[]) 
-        ; XappW =.. [R,X,W],
-        (ecrireconsreg -> 
+  (ecrireconsreg -> ecrire1(\nconsreg-def-elt-definition(Nomfof,(A<=D)))
+  ;true),
+  ( A =..[R,X,E],not(var(E)),E=..[F|_] 
+  ) ,
+  ajconcept(F), 
+  denumlast(F,F1), 
+  creer_nom_regle(F1,Nom),
+  (atom(E) -> 
+    (ecrireconsreg -> ecrire1(consreg-def-elt-apres1:(![X]:(A =>D)));true),
+                      consreg((![X]:(A =>D)),_,Nomfof,F,Nom,[],[]) 
+    ; XappW =.. [R,X,W],
+      (ecrireconsreg -> 
                ecrire1(consreg-def-elt-apres2:((E::W)=>![X]:(XappW <=>D)))
-        ;true),
-        consreg((E::W)=>![X]:(XappW <=>D),_,Nomfof,F,Nom,[],[])
-        ),
-        fail.
+    ;true),
+    consreg((E::W)=>![X]:(XappW <=>D),_,Nomfof,F,Nom,[],[])
+    ),
+    fail.
 
 %% à partir des lemmes
 consreg :- lemme(Nomfof,E),atom_concat(Nomfof,'_',Nom0),
-           creer_nom_regle(Nom0,Nom1),consreg(E,_,Nomfof,lemme,Nom1,[],[]),fail.
+       creer_nom_regle(Nom0,Nom1),consreg(E,_,Nomfof,lemme,Nom1,[],[]),fail.
 
 consreg.
 
@@ -974,9 +1007,10 @@ consreg(_,_,_,_,_,_,_) :-
 consreg(E,N,Nomfof,Concept,Nom,Cond,Antecedants) :- 
 ( 
   %% une disjonction est remplacée par une conjonction
-  E = ((A|B)=>C) -> consreg((A=>C)&(B=>C),N,Nomfof,Concept,Nom,Cond,Antecedants)
-
-; %% remplacements à partir d'une égalité
+  E = ((A|B)=>C) -> 
+          consreg((A=>C)&(B=>C),N,Nomfof,Concept,Nom,Cond,Antecedants)
+;
+  %% remplacements à partir d'une égalité
   E = ((X=Y) => C), (var(X) | var(Y)) -> 
         ( var(X) -> remplacer(Cond,X,Y,Cond1), remplacer(C,X,Y,C1)
         ; var(Y) -> remplacer(Cond,Y,X,Cond1), remplacer(C,Y,X,C1)
@@ -984,23 +1018,25 @@ consreg(E,N,Nomfof,Concept,Nom,Cond,Antecedants) :-
         consreg(C1,N,Nomfof,Concept,Nom,Cond1,Antecedants)
 
 %% si E est une implication A => B, plusieurs cas à envisager
-
-; %% si A est une expression négative ~D, on l'ajoute comme condition(s) ,puis
+;
+  %% si A est une expression négative ~D, on l'ajoute comme condition(s) ,puis
+  %% deux appels récursifs pour B d'une part et D|B d'autre part 
   E = (~ D => B) -> ajoucond(N,Cond,Antecedants, ~ D, Cond1,Antecedants1),
                     consreg(B, N, Nomfof,Concept, Nom, Cond1,Antecedants1),
                     creer_nom_regle(Nom, Nom1),
                     consreg(D | B, N, Nomfof,Concept,Nom1,Cond,Antecedants)
-; %% idem si A = ~ D & A1=>B, avec appels récursifs pour A1=>B et A1=>D|B
+; 
+  %% idem si A = ~ D & A1=>B, avec appels récursifs pour A1=>B et A1=>D|B
   E = (~ D & A1 =>B) -> ajoucond(N,Cond,Antecedants,~ D,Cond1,Antecedants1),
-                       consreg(A1 => B,N,Nomfof,Concept,Nom,Cond1,Antecedants1),
-                       creer_nom_regle(Nom, Nom1),
-                  consreg(A1 => (D|B),N,Nomfof,Concept,Nom1,Cond,Antecedants)
-
-; %% les éléments d'une conjonction seront traités un par un
+                    consreg(A1 => B,N,Nomfof,Concept,Nom,Cond1,Antecedants1),
+                    creer_nom_regle(Nom, Nom1),
+                   consreg(A1 => (D|B),N,Nomfof,Concept,Nom1,Cond,Antecedants)
+;
+  %% les éléments d'une conjonction seront traités un par un
   E = (A1 & A2 => B) -> 
               consreg(A1 => (A2 => B),N,Nomfof,Concept,Nom,Cond,Antecedants)
-
-; %% si A = (!_:_) est une expression universelle
+;
+  %% si A = (!_:_) est une expression universelle
   %% on remplace une conclusion instanciant B par la condition suffisante A
   %% le problème est ainsi remplacé par le suivant :
   %%   si la conclusion est une instance de B (condition concl(B)
@@ -1047,59 +1083,59 @@ consreg(E,N,Nomfof,Concept,Nom,Cond,Antecedants) :-
                                       Regle2
                                ),
                      ajoureg(N, endernier, Nom_cs_endernier, Regle2)
-
-; %% dans les autres cas d'implication, ajout de A à la liste de conditions
+;
+  %% dans les autres cas d'implication, ajout de A à la liste de conditions
   E = (A=>B) -> ajoucond(N,Cond,Antecedants,A,Cond1,Antecedants1),
                 consreg(B,N,Nomfof,Concept,Nom,Cond1,Antecedants1)
-  
-; %% une equivalence est rempplacée par la conjonction des deux implications
+;  
+  %% une equivalence est rempplacée par la conjonction des deux implications
   E = (A<=>B) -> consreg((A=>B)&(B=>A),N,Nomfof,Concept,Nom,Cond,Antecedants)
-
-; %% conjonction, autant de paquets de règles que d'éléments de la conjonction
+;
+  %% conjonction, autant de paquets de règles que d'éléments de la conjonction
   E = (A & B) -> creer_nom_regle(Nom, Nom1),
                  consreg(A,N,Nomfof,Concept,Nom1,Cond,Antecedants),
                  creer_nom_regle(Nom1, Nom2),
                  consreg(B,N,Nomfof,Concept,Nom2,Cond,Antecedants)
-
-; %% propriété universelle 
+;
+  %% propriété universelle 
   E = (![X]:B),(var(X); atom(X)) -> 
               ajoucond(N,Cond,Antecedants,objet(N,X),Cond1,Antecedants1),
               consreg(B,N,Nomfof,Concept,Nom,Cond1,Antecedants1)
 ; E = (![X|XX]:B),(var(X); atom(X)) -> 
               ajoucond(N,Cond,Antecedants,objet(N,X),Cond1,Antecedants1),
               consreg(!XX:B,N,Nomfof,Concept,Nom,Cond1,Antecedants1)
-
-; %% propriété issue d'un symbole fonctionnel p(f(X) devenu 
+;
+  %% propriété issue d'un symbole fonctionnel p(f(X) devenu 
   %%                                         seul(f(X)::Y,p(Y))
   E = seul(FX::Y, B) ->
-         %%  1 e r e  c o n s t r u c t i o n
-         %%  si on a deja un (des) objet(s) FX::Y
-         ajoucond(N,Cond,Antecedants,FX::Y,Cond1,Antecedants1),
-         consreg(B,N,Nomfof,Concept,Nom,Cond1,Antecedants1),
-         %%  2 è m e  c o n s t r u c t i o n , la règle créera l'objet FX:Y
-         ( seulile(oui),seulile(non)->true
-         ; seulile(non)-> true
-         ; seulile(oui) ->
-           atom_concat(Nom, '_crea_seul', Nom2),
-           creer_nom_regle(Nom2, Nom1),
-           ajouseqavantobjet(Cond, \+ hyp(N,FX::Y,_), Cond3),
-           consreg((?[Y]:((FX::Y) & B)),N,Nomfof,Concept,Nom1,Cond3,Antecedants)
-         ; true
-         )
-
-; %% la négation d'une propriété existentielle est remplacée
+        %%  1ere  c o n s t r u c t i o n si on a deja un (des) objet(s) FX::Y
+        ajoucond(N,Cond,Antecedants,FX::Y,Cond1,Antecedants1),
+        consreg(B,N,Nomfof,Concept,Nom,Cond1,Antecedants1),
+        %%  2 è m e  c o n s t r u c t i o n , la règle créera l'objet FX:Y
+        ( seulile(oui),seulile(non)->true
+        ; seulile(non)-> true
+        ; seulile(oui) ->
+          atom_concat(Nom, '_crea_seul', Nom2),
+          creer_nom_regle(Nom2, Nom1),
+          ajouseqavantobjet(Cond, \+ hyp(N,FX::Y,_), Cond3),
+          consreg((?[Y]:((FX::Y) & B)),N,Nomfof,Concept,Nom1,Cond3,Antecedants)
+        ; true
+        )
+;
+  %% la négation d'une propriété existentielle est remplacée
   %%    par une propriété universelle 
-  E = (~ (?[X]:A)) -> consreg((![X]:(~ A)),N,Nomfof,Concept,Nom,Cond,Antecedants)
-
-; %% supression d'une double négation
+  E = (~ (?[X]:A)) ->
+            consreg((![X]:(~ A)),N,Nomfof,Concept,Nom,Cond,Antecedants)
+;
+  %% supression d'une double négation
   E = (~ ~ A) -> consreg(A,N,Nomfof,Concept,Nom,Cond,Antecedants)
-
-; %% ~A est traité comme A => false, sauf dans deux cas
+;
+  %% ~A est traité comme A => false, sauf dans deux cas
   E = (~ A), \+(A=(!_:_)) , \+ A=(_=_) ->
              ajoucond(N, Cond, Antecedants,A, Cond1,Antecedants1),
              consreg(false,N,Nomfof,Concept,Nom,Cond1,Antecedants1)
-
-; %% egalité sans conditions, ajout de l'action "l'ajouter comme nouvelle hyp"  
+;
+  %% égalité sans conditions, ajout de l'action "l'ajouter comme nouvelle hyp"
   E = (_=_) -> Cond=Cond0, 
                ajoufinseq(Cond, \+ E, Cond1), 
                ajoufinseq(Cond1, ajhyp(N,E,I1), CondAct2),
@@ -1134,8 +1170,8 @@ consreg(E,N,Nomfof,Concept,Nom,Cond,Antecedants) :-
                           Regle),
              ajoureg(N, Concept, Nom, Regle)
 
-
-;  %% traitement par défaut et fin des appels récursifs
+;
+   %% traitement par défaut et fin des appels récursifs
       \+tempsdepasse(-1,'consreg par defaut'),
       (ecrireconsreg -> ecrire1('suite-de-consreg-Cond'=Cond);true),
    %% suppression des conditions égalitaires (remplacement) dans Cond0
@@ -1199,7 +1235,6 @@ consreg(E,N,Nomfof,Concept,Nom,Cond,Antecedants) :-
 %% ajoute A ou des conditions issues de A à la partie C déjà construite
 %%     et l'etape en cours à la liste An des etapes des conditions
 %%   pour donner CA et AnA
-
 ajoucond(N,C,An,A,CA,AnA) :- 
      ( var(A) -> ajoufinseq(C,hyp(N,A,_),CA)
      ; A = (A1 & A2) -> ajoucond(N,C,An,A1,C1,An1),
@@ -1231,15 +1266,15 @@ ajoucond(N,C,An,A,CA,AnA) :-
 %%       regle(N,Nom) :- Corps0.
 %% pour les règles construites à partir d'hypothèses universelles
 %%    ceci est fait par un appel à ajoureglocale qui ajoutera aussi
-%%    le nom de a règle dans la liste des réègles actives
+%%    le nom de a règle dans la liste des règles actives
 
 ajoureg(N, Arg, Nom, Corps) :- 
-       sup_cond_egal(Corps, Corps0),
-       (ecrireconsreg -> nl,ecrire1('ajoureg apres sup_cond_egal'-Corps0);true),
-       ( Arg=(Nsth+H) -> etape(E),assert(reglehypuniv(Nom,H,E)),
-                        ajoureglocale(Nsth,(regle(N,Nom):-Corps0), Nom)
-       ; assert((regle(N,Nom) :- Corps0)), assert(type(Nom,Arg))
-       ).
+    sup_cond_egal(Corps, Corps0),
+    (ecrireconsreg -> nl,ecrire1('ajoureg apres sup_cond_egal'-Corps0);true),
+    ( Arg=(Nsth+H) -> etape(E),assert(reglehypuniv(Nom,H,E)),
+                      ajoureglocale(Nsth,(regle(N,Nom):-Corps0), Nom)
+    ; assert((regle(N,Nom) :- Corps0)), assert(type(Nom,Arg))
+    ).
 
 
 %% ++++++++++++++++ sup_cond_egal(Corps,Corps0) ++++++++++++++++
@@ -1284,8 +1319,8 @@ ajoureglocale(Nth,ClauseR, Nom) :-
 %% supprime la regle de nom Nom de la liste de règles LR
 desactiver(N,Nom) :- reglactiv(N,LR),member(Nom,LR),oter(Nom,LR,LR1),
                      retract(reglactiv(N,LR)), assert(reglactiv(N,LR1)),
-     acrire1(tr,[N,'supprimer la regle active',
-                 Nom]).
+    acrire1(tr,[N,'supprimer la regle active',
+                Nom]).
 desactiver(_,_). 
 %% L1 est la liste L sans la première occurrence de X 
 oter(X,[X|L],L) :- !. 
@@ -1320,11 +1355,15 @@ acti_ro :- priorites(sans),
            fail.
 acti_ro :- priorites(avec),
            reglactiv(0,LR), 
-           ( bagof(R, P^( lien(0,P),type(R,P),\+ priorite(R,2),\+ type(R,enpremier),\+ type(R,endernier)),RR)-> true
+           ( bagof(R, P^( lien(0,P),type(R,P),\+ priorite(R,2),
+                          \+ type(R,enpremier),\+ type(R,endernier)),RR)
+             -> true
            ; RR= []   
            ),
            append(LR, RR, LRR1),
-           ( bagof(R,(type(R,lemme),\+ priorite(R,2),\+ type(R,enpremier),\+ type(R,endernier)),RR1) -> append(LRR1, RR1,LRR2)
+           ( bagof(R,(type(R,lemme),\+ priorite(R,2),
+                     \+ type(R,enpremier),\+ type(R,endernier)),RR1)
+              -> append(LRR1, RR1,LRR2)
            ; LRR2 = LRR1 
            ) ,
            ( bagof(R, P^( lien(0,P),type(R,P),priorite(R,2)),RR2)
@@ -1373,79 +1412,78 @@ compareg1ter([I1,I2,X,X,Y,Z|_],[I3,I6,I4,I5,Y,Z]) :- I3 is I1+1, I4 is I2-1,
 traitegal(N,X,Y,Ixy) :- \+ tempsdepasse(N,traitegal),
                          acrire1(tr,traitegal-N-X-Y-Ixy),fail.
 traitegal(N, X, Y, Ixy) :- 
-              hyp(N, H,I),
-                                        \+ H =(X=Y), 
-              remplacer(H,Y,X,H1),\+ H=H1,
-              retract(hyp(N,H,_)),
-              \+ hyp(N, H1,_), ajhyp(N, H1,I1),
-              traces(N,'action(traitegal_hyp)',
-                     (hyp(N,X=Y,Ixy),hyp(N,H,I)), 
-                     ajhyp(N, H1,I1),I1,
-                     ['on remplace',Y,par,X,'dans les hypotheses'],
-                     [I,Ixy]
-                     ), 
-              acrire1(tr,'-------------------------------- action traitegal_hyp'),
-              fail.
+  hyp(N, H,I),
+  \+ H =(X=Y), 
+  remplacer(H,Y,X,H1),\+ H=H1,
+  retract(hyp(N,H,_)),
+  \+ hyp(N, H1,_), ajhyp(N, H1,I1),
+  traces(N,'action(traitegal_hyp)',
+         (hyp(N,X=Y,Ixy),hyp(N,H,I)), 
+         ajhyp(N, H1,I1),I1,
+         ['on remplace',Y,par,X,'dans les hypotheses'],
+         [I,Ixy]
+         ), 
+  acrire1(tr,'-------------------------------- action traitegal_hyp'),
+  fail.
 traitegal(N, X, Y,_) :- 
-              hyp_traite(N, H), \+ H =(_=_),
-              remplacer(H,Y,X,H1),\+ H=H1,
-              retract(hyp_traite(N,H)),
-              \+ hyp(N, H1, _), 
-              acrire1(tr,'et apres'),
-              ajhyp_traite(N, H1),
-              fail.
+         hyp_traite(N, H), \+ H =(_=_),
+         remplacer(H,Y,X,H1),\+ H=H1,
+         retract(hyp_traite(N,H)),
+         \+ hyp(N, H1, _), 
+         acrire1(tr,'et apres'),
+         ajhyp_traite(N, H1),
+         fail.
 traitegal(N,X,Y,Ixy) :- 
-                    concl(N, X=Y,I), nouvconcl(N, true,I1),
+     concl(N, X=Y,I), nouvconcl(N, true,I1),
      traces(N,action('traitegal_concl='),
             (hyp(N,X=Y,Ixy),concl(N, X=Y,I)),
             nouvconcl(N, true,I1),I1,
             ['on remplace',Y,par,X,'dans la conclusion'],
             [I,Ixy]
-                    ),
+           ),
      acrire1(tr,'-------------------------------- traitegal_concl=').
 traitegal(N,X,Y,Ixy) :- 
-                    concl(N, C, I),  remplacer(C, Y,X,C1), \+ C=C1,
-                    nouvconcl(N, C1, I1),
-             traces(N,action(traitegal_concl),
-                    (hyp(N,X=Y,Ixy),concl(N, C, I)),
-                    nouvconcl(N, C1, I1),I1,
-                    ['on remplace',Y,par,X,'dans la conclusion'],
-                    [I,Ixy]
-                    ),
-      acrire1(tr,'-------------------------------- traitegal_concl'),
+      concl(N, C, I),  remplacer(C, Y,X,C1), \+ C=C1,
+      nouvconcl(N, C1, I1),
+      traces(N,action(traitegal_concl),
+               (hyp(N,X=Y,Ixy),concl(N, C, I)),
+               nouvconcl(N, C1, I1),I1,
+               ['on remplace',Y,par,X,'dans la conclusion'],
+               [I,Ixy]
+               ),
+      acrire1(tr, '-------------------------------- traitegal_concl'),
       fail.
 traitegal(N,X,Y,I) :- 
-                    clause(regle(L,Nom),Q), 
-                    \+ Nom = ! , 
-                    \+ Nom = concl_seul , 
-                    reglactiv(N,LR),member(Nom,LR),
-                    concat_atom(['trop de regles a tester pour le remplacement de ',
-                                 Y,' par ',X],Message),
-                    \+ tempsdepasse(N,Message),
-                    remplacer(Q, Y,X,Q1), \+ Q=Q1,
-                    sup_cond_triviales(Q1,Q2), 
-                    creer_nom_regle(Nom,Nom1),
-                    remplacer(Q2,Nom,Nom1,Q3),
-                    R = (regle(L,Nom1):-Q3),
-                    ajoureglocale(N,R,Nom1),
-                    etape(E),
-                    traces(N,action(traitegal_regle),
-                           regle(Nom),creer_regle(Nom1),E,
-                           [Y,'est remplace',X,
-                            'dans la regle',Nom,
-                            'pour donner la regle',Nom1],
-                           [I]
-                          ),
-                    desactiver(N,Nom),
-              acrire1(tr,'-------------------------------- traitegal_regle'
-                     ),
-                    fail.
+        clause(regle(L,Nom),Q), 
+        \+ Nom = ! , 
+        \+ Nom = concl_seul , 
+        reglactiv(N,LR),member(Nom,LR),
+        concat_atom(['trop de regles a tester pour le remplacement de ',
+                     Y,' par ',X],Message),
+        \+ tempsdepasse(N,Message),
+        remplacer(Q, Y,X,Q1), \+ Q=Q1,
+        sup_cond_triviales(Q1,Q2), 
+        creer_nom_regle(Nom,Nom1),
+        remplacer(Q2,Nom,Nom1,Q3),
+        R = (regle(L,Nom1):-Q3),
+        ajoureglocale(N,R,Nom1),
+        etape(E),
+        traces(N,action(traitegal_regle),
+                 regle(Nom),creer_regle(Nom1),E,
+                 [Y,'est remplace',X,
+                    'dans la regle',Nom,
+                    'pour donner la regle',Nom1],
+                 [I]
+               ),
+        desactiver(N,Nom),
+        acrire1(tr,'-------------------------------- traitegal_regle'
+               ),
+        fail.
 traitegal(N,X,Y,_) :- 
-                retract(hyp(N,X=Y,_)), 
-                acrire1(tr,['supprimer hypothese',
-                           X=Y]),
-                retract(objet(N,Y)),
-                acrire1(tr,['supprimer objet',Y]).
+       retract(hyp(N,X=Y,_)), 
+       acrire1(tr,['supprimer hypothese', X=Y]),
+       retract(objet(N,Y)),
+       acrire1(tr,['supprimer objet',Y]).
 traitegal(_,_,_,_). 
 sup_cond_triviales( (hyp(_,X=X,_)),[]) :- 
                                           !.
@@ -1455,53 +1493,59 @@ sup_cond_triviales( (Q,hyp(_,X=X,_)),Q) :-
 sup_cond_triviales((X,Q),(X,Q1)) :- sup_cond_triviales(Q,Q1),!.
 sup_cond_triviales(Q,Q).
 
-elifondef :- definition(Nomfof,D), D=(!_:(A=B)), 
-              assert(definition1(Nomfof,A=B )),
+%% +++++++ elifondef + elifondef1 + elifondef2 + elifondef3 + elifondef4 +++++++
+
+elifondef :- %% definition !_:(A=B)
+             definition(Nomfof,D), D=(!_:(A=B)), 
+             assert(definition1(Nomfof,A=B )),
              retract(definition(Nomfof,D)),
              fail.
+
 elifondef :- definition(Nomfof,D), D=(!_:(~(A=B))), 
              assert(definition1(Nomfof,~(A=B))), retract(definition(Nomfof,D)),
              fail.
 
-elifondef :- 
+elifondef :- %% definition(A<=>B),
              definition(Nomfof,D), D=(!_:(A<=>B)), 
-             A=..[P|_], 
-           ( B=..[P|_] -> true 
-           ; B=(~B2), B2=..[P|_]-> true 
-           ; true %message(z_elidondef_lesautresdefinitions,D)  
-           ),
+             A=..[P|_],
+             ( B=..[P|_] -> true
+             ; B=(~B2), B2=..[P|_]-> true
+             ; true
+             ),
              elifon(B,B1), 
              assert(definition1(Nomfof,A<=>B1)),
-             (ecrireconsreg-> ecrire1(elifondef-ancienne-def-definition(Nomfof,D)-nouvelle-definition1(A<=>B1));true),
+             (ecrireconsreg->ecrire1(elifondef-ancienne-def-definition(Nomfof,D)-
+                                     nouvelle-definition1(A<=>B1))
+             ;true),
              retract(definition(Nomfof,D)),
              fail.
-
 elifondef :- definition1(Nomfof,D),
              retract(definition1(Nomfof,D)),assert(definition(Nomfof,D)),fail.
+
 elifondef :- lemme(Nom,B),elifon(B,B1),
              retract(lemme(Nom,B)),assert(lemme1(Nom,B1)),
- ( avecseulile -> 
-        ( element(_H=>seul(_FXY,_C),B1),\+ (seulile(oui)) -> 
-                                                assert(seulile(oui))
-        ; B1 = seul(_FXY,_C),\+ (seulile(oui)) -> assert(seulile(oui))
-        ; element(_H=>_C1 & seul(_FXY,_C),B1),\+ (seulile(oui)) -> 
-                                                assert(seulile(oui))
-        ; element(_H=>seul(_FXY,_C) & _C1,B1),\+ (seulile(oui)) -> 
-                                                assert(seulile(oui))
-        ; element(_H<=>seul(_FXY,_C),B1),\+ (seulile(non)) -> 
-                                                assert(seulile(non))
-        )
- ; true  
- ),
- fail.
-elifondef :- lemme1(Nom,B), retract(lemme1(Nom,B)),assert(lemme(Nom,B)),
+             (avecseulile -> 
+                (element(_H=>seul(_FXY,_C),B1),\+ (seulile(oui))
+                                                       -> assert(seulile(oui))
+                ; B1 = seul(_FXY,_C),\+ (seulile(oui)) -> assert(seulile(oui))
+                ; element(_H=>_C1 & seul(_FXY,_C),B1),\+ (seulile(oui))
+                                                       -> assert(seulile(oui))
+                ; element(_H=>seul(_FXY,_C) & _C1,B1),\+ (seulile(oui))
+                                                       -> assert(seulile(oui))
+                ; element(_H<=>seul(_FXY,_C),B1),\+ (seulile(non))
+                                                       -> assert(seulile(non))
+                )
+              ; true  
+             ),
              fail.
+
+elifondef :- lemme1(Nom,B), retract(lemme1(Nom,B)),assert(lemme(Nom,B)), fail.
 
 elifondef :- definition(Nomfof,D),D=(!_:De),
              retract(definition(Nomfof,D)), assert(definition(Nomfof,De)),
              fail.
 
-elifondef .
+elifondef.
 
 elifon(E, E1) :- 
          ( (var(E);E=false;objet(_,E)) -> E1=E   
@@ -1561,19 +1605,21 @@ elifon4(FY::X,(Z,E1 & E2)) :-
                          elifon4(FY1::X, E1),
                          elifon4(Arg::Z,E2),
                          !.
-elifon4(E,E). 
+elifon4(E,E).
 
 elifon3(FX::Y,E) :- 
-                   FX =.. [F|Args], member(Arg,Args),
-                   \+var(Arg), \+ objet(_,Arg),
-                   ( (atom(Arg);number(Arg)) -> ajobjet(-1,Arg),fail
-                   ;
-                   remplacer(Args,Arg,Z,Args1), FY1 =.. [F|Args1],
-                   elifon3(FY1::Y,FY1Y),
-                   elifon2(seul(Arg::Z,FY1Y),E)
-                   ),
-                   !.
+                    FX =.. [F|Args], member(Arg,Args),
+                    \+var(Arg), \+ objet(_,Arg),
+                    ( (atom(Arg);number(Arg)) -> ajobjet(-1,Arg),fail
+                    ;
+                    remplacer(Args,Arg,Z,Args1), FY1 =.. [F|Args1],
+                    elifon3(FY1::Y,FY1Y),
+                    elifon2(seul(Arg::Z,FY1Y),E)
+                    ),
+                    !.
 elifon3(E,E).
+
+%% ++++++++++++++++++++ traiter +++++++++++++++++++++
 
 traiter(N,(?[X|XX]:P),I1) :-        
      ( var(X) ; atom(X)), !,
@@ -1656,7 +1702,6 @@ effacer_regcons :- type(R,C),
 effacer_regcons :- effacer(type(_,_)).
 
 %% affiche les faits hyp(..), concl(..), objet(..)
-%% displays facts hyp(..), concl(..), objet(..)
 listeth :- liste([hyp, concl, objet]).
 %% affiche tous les faits que vous voulez
 listetout :- liste([hyp, hyp_traite, concl, 
@@ -1740,9 +1785,9 @@ elt_ou_bis(N, A) :-
                  acrire1(tr,elt_ou_bis-'FX::Y'/(FX::Y)-'Y'/Y-'Z'/Z-'T'/T), !.
 elt_ou_bis(N, _ | B) :- elt_ou_bis(N, B), acrire1(tr,elt_ou_bis_), !.
  
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%  écritures  
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%%%%%%%%%%%%%%%%%%%%%
+%%    écritures    %%
+%%%%%%%%%%%%%%%%%%%%% 
 
 ecrire1(L):- ligne, ecrire(L). 
 ecrire1etmessage(M) :- message(M),ecrire1(M).
@@ -1796,7 +1841,8 @@ message(Fich,M) :- tellling(F), appendd(Fich), probleme(Probleme),
 
 %% ++++++++++++++ traces(N,Nom,Cond,Act,E,Expli,Antecedants) ++++++++++++++
 
-%% affiche (si option tr) et mémorise dans tracedem l'action Act, à l'etape N,%%fr de la règle ou action Nom, avec ses Conditions, ses Antecedants 
+%% affiche (si option tr) et mémorise dans tracedem l'action Act, à l'etape N,
+%% de la règle ou action Nom, avec ses Conditions, ses Antecedants 
 %% et une Explication
 
 traces(N,Nom,Cond,Act,E,Expli,Antecedants) :- 
@@ -2200,7 +2246,7 @@ tdp :- test_def_part.
 %% règle(s) traitant les conjonctions
 regles_et([concl_et]).
 %% règles générales, c'est-à-dire non liées
-%% à un concept ou une hypothèse universelle
+%%    à un concept ou une hypothèse universelle
 regles_gen( [!, 
               elifon,
               concl_exi_all,
